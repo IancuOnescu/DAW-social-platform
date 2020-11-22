@@ -1,0 +1,18 @@
+﻿@model DAW_social_platform.Models.Group
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>Afisare grup</h2>
+
+<p>@Model.groupName</p>
+
+<form method="post" action="/Groups/Delete/@Model.groupId">
+
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+    <a class="btn btn-success" href="/Groups/Edit/@Model.groupId">Editeaza grupul</a>
+
+    <button class="btn btn-danger" type="submit">Sterge grupul</button>
+
+</form>

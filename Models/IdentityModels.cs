@@ -23,7 +23,12 @@ namespace DAW_social_platform.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext,
+            DAW_social_platform.Migrations.Configuration>("DefaultConnection"));
+            //punem amandoi linia asta???
         }
+
+        public DbSet<Group> Groups { get; set; }
 
         public static ApplicationDbContext Create()
         {
