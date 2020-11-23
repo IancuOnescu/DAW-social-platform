@@ -30,6 +30,35 @@ namespace DAW_social_platform.Controllers
             return View(group);
         }
 
+        [HttpPost]
+        public ActionResult Show(Message message)
+        {
+            message.date = DateTime.Now;
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Messages.Add(message);
+                    db.SaveChanges();
+                    return Redirect("/Groups/Show/" + message.groupId);
+                }
+
+                else
+                {
+                    Group group = db.Groups.Find(message.groupId);
+                    return View(group);
+                }
+
+            }
+
+            catch (Exception e)
+            {
+                Group group = db.Groups.Find(message.groupId);
+                return View(group);
+            }
+        }
+
         public ActionResult New()
         {
             return View();

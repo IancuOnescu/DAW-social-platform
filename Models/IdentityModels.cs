@@ -29,6 +29,7 @@ namespace DAW_social_platform.Models
         }
 
         public DbSet<Group> Groups { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         public static ApplicationDbContext Create()
         {
