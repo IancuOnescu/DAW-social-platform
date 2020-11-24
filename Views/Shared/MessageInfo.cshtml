@@ -1,0 +1,22 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div>
+                <p>@Model.messageContent</p>
+                <small class="pull-right">@Model.date</small>
+            </div>
+            <div style="display: inline-block; float : left; margin-right: 15px">
+                <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@Model.messageId"></a>
+            </div>
+            <div style="display: inline-block; float : left">
+                <form method="post" action="/Messages/Delete/@Model.messageId">
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+<hr />

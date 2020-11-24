@@ -26,10 +26,14 @@ namespace DAW_social_platform.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-            Database.SetInitializer(new
-            MigrateDatabaseToLatestVersion<ApplicationDbContext,
-             DAW_social_platform.Migrations.Configuration>("DefaultConnection"));
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext,
+            DAW_social_platform.Migrations.Configuration>("DefaultConnection"));
         }
+
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
+
 
         public static ApplicationDbContext Create()
         {

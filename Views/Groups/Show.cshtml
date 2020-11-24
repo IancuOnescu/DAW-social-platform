@@ -1,0 +1,53 @@
+﻿@model DAW_social_platform.Models.Group
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>Afisare grup</h2>
+
+<p>@Model.groupName</p>
+<br />
+
+<p>@Model.description</p>
+
+<br />
+
+
+<form method="post" action="/Groups/Delete/@Model.groupId">
+
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+    <a class="btn btn-success" href="/Groups/Edit/@Model.groupId">Editeaza grupul</a>
+
+    <button class="btn btn-danger" type="submit">Sterge grupul</button>
+
+</form>
+
+<br />
+
+@foreach (var message in Model.messages)
+{
+    @Html.Partial("MessageInfo", message)
+    <br />
+}
+
+<br />
+
+<div class="container">
+    <form method="post" action="/Groups/Show/@Model.groupId">
+        <div class="panel-body">
+            <input type="hidden" name="groupId" value="@Model.groupId" />
+            <label>Continut mesaj</label>
+            <br />
+            <textarea class="form-control" name="messageContent"></textarea>
+            @Html.ValidationMessage("messageContent", "", new { @class = "text-danger" })
+            <br />
+            <button class="btn btn-success " type="submit">Trimite mesaj</button>
+        </div>
+    </form>
+</div>
+
+<br />
+
+
+

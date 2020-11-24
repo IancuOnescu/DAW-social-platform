@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Profiles"))
+{
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+
+    @Html.Label("description", "Descriere")
+    <br />
+    @Html.TextBox("description", null, new { @class = "form-control" })
+
+    @Html.ValidationMessage("description", null, new { @class = "text-danger" })
+    <br />
+
+    <label>
+        Data nasterii
+        <input class="form-control" type="text" name="birthDate" value="@Model.birthDate.ToString("dd/MM/yyyy")"/>
+    </label>
+    <br />
+
+    @Html.ValidationMessage("birthDate", null, new { @class = "text-danger" })
+    <br />
+
+    @Html.Label("hobbies", "Hobbies")
+    <br />
+    @Html.TextBox("hobbies", null, new { @class = "form-control" })
+
+
+    <button class="btn btn-sm btn-success" type="submit">Editeaza profilul</button>
+
+}

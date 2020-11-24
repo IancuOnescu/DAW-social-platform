@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+<h2>New profile</h2>
+
+@using (Html.BeginForm(actionName: "New", controllerName: "Profiles"))
+{
+
+    @Html.Label("description", "Descriere")
+    <br />
+    @Html.TextBox("description", null, new { @class = "form-control" })
+
+    @Html.ValidationMessage("description", null, new { @class = "text-danger" })
+    <br />
+
+    @Html.Label("birthDate", "Data nasterii")
+    <br />
+    @Html.TextBox("birthDate", null, new { @class = "form-control" })
+
+    @Html.ValidationMessage("birthDate", null, new { @class = "text-danger" })
+    <br />
+
+    @Html.Label("hobbies", "Hobbies")
+    <br />
+    @Html.TextBox("hobbies", null, new { @class = "form-control" })
+
+
+    <button class="btn btn-sm btn-success" type="submit">Creeaza profilul</button>
+
+}

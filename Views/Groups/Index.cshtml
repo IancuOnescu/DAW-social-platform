@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index Groups</h2>
+
+@if (TempData.ContainsKey("message"))
+ {
+    <h1>@ViewBag.message</h1>
+ }
+<br />
+
+@foreach (DAW_social_platform.Models.Group group in ViewBag.groups)
+ {
+    <div>
+        <div>@group.groupName</div>
+        <br />
+        <a class="btn btn-success" href="/Groups/Show/@group.groupId">Afisare grup</a>
+    </div>
+    <hr />
+ }
+<br />
+<a class="btn btn-primary" href="/Groups/New">Creeaza grup nou</a>
+
