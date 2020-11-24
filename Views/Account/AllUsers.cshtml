@@ -1,0 +1,15 @@
+﻿@model IEnumerable<DAW_social_platform.Models.ApplicationUser>
+@{
+    ViewBag.Title = "AllUsers";
+}
+
+<h2>AllUsers</h2>
+
+@foreach (var user in Model)
+{
+    <p>@user.UserName</p>
+    <p>@user.Email</p>
+}
+<br />
+<br />
+<br />
