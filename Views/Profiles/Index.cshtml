@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index profile</h2>
+
+@if (TempData.ContainsKey("message"))
+{
+    <h1>@ViewBag.message</h1>
+}
+<br />
+
+<a class="btn btn-primary" href="/Profiles/New">Creeaza profil</a>
+
+@foreach (DAW_social_platform.Models.Profile profile in ViewBag.profiles)
+{
+    @Html.Partial("ProfileInfo", profile)
+    <br />
+    <hr />
+}

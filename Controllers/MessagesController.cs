@@ -50,7 +50,6 @@ namespace DAW_social_platform.Controllers
             {
                 return View();
             }
-
         }
     }
 }

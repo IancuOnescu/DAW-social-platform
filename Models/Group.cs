@@ -12,6 +12,7 @@ namespace DAW_social_platform.Models
         public int groupId { get; set; }
         [Required(ErrorMessage = "Numele grupului este obligatoriu")]
         public string groupName { get; set; }
+        public string description { get; set; }
 
         public virtual ICollection<Message> messages { get; set; }
     }
