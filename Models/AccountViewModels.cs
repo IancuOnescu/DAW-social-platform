@@ -65,6 +65,11 @@ namespace DAW_social_platform.Models
     public class RegisterViewModel
     {
         [Required]
+        [StringLength(100, ErrorMessage = "Invalid user name")]
+        [Display(Name = "Name")]
+        public string UserName { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

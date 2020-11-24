@@ -61,6 +61,7 @@ namespace DAW_social_platform.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.ChangeUsernameSucces ? "Your username has been changed"
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -277,6 +278,38 @@ namespace DAW_social_platform.Controllers
         }
 
         //
+        // GET: /Manage/ChangeUsername
+        public ActionResult ChangeUsername()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Manage/ChangeUsername
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeUsername(ChangeUsernameViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    user.UserName = model.NewUsername;
+                    var result = await UserManager.UpdateAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        AddErrors(result);
+                    }
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeUsernameSucces});
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+        //
         // GET: /Manage/ManageLogins
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
@@ -333,6 +366,28 @@ namespace DAW_social_platform.Controllers
             base.Dispose(disposing);
         }
 
+        [HttpDelete]
+        public async Task<ActionResult> Delete()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                return View("Error");
+            }
+            else
+            {
+                await UserManager.RemoveFromRolesAsync(userId, UserManager.GetRoles(userId).ToArray());
+                var result = await UserManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    AuthenticationManager.SignOut();
+                    return RedirectToAction("Index", "Home");
+                }
+                return View("Error");
+            }
+        }
+
 #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
@@ -381,6 +436,7 @@ namespace DAW_social_platform.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
+            ChangeUsernameSucces,
             Error
         }
 

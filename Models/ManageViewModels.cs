@@ -58,6 +58,14 @@ namespace DAW_social_platform.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class ChangeUsernameViewModel
+    {
+        [Required]
+        [StringLength(100, ErrorMessage = "Invalid user name")]
+        [Display(Name = "Insert your new username")]
+        public string NewUsername { get; set; }
+    }
+
     public class AddPhoneNumberViewModel
     {
         [Required]

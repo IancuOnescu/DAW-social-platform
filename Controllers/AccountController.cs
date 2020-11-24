@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using DAW_social_platform.Models;
+using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace DAW_social_platform.Controllers
 {
@@ -151,17 +153,19 @@ namespace DAW_social_platform.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    UserManager.AddToRole(user.Id, "User");
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -403,6 +407,14 @@ namespace DAW_social_platform.Controllers
             return View();
         }
 
+        // 
+        // GET: All users
+        public ActionResult AllUsers()
+        {
+            var users = UserManager.Users;
+            return View(users);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -422,7 +434,6 @@ namespace DAW_social_platform.Controllers
 
             base.Dispose(disposing);
         }
-
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
