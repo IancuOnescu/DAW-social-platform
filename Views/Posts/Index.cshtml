@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>News Feed</h2>
+
+@if (TempData.ContainsKey("message"))
+ {
+    <h1>@ViewBag.message</h1>
+ }
+<br />
+
+@foreach (DAW_social_platform.Models.Post post in ViewBag.posts)
+ {
+<div>
+    <div>@post.Content</div>
+    <br />
+    <a class="btn btn-success" href="/Posts/Show/@post.PostId">Afisare postare</a>
+</div>
+    <hr />
+ }
+<br />
+<a class="btn btn-primary" href="/Posts/New">Adauga postare</a>
+
