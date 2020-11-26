@@ -1,0 +1,47 @@
+﻿@model DAW_social_platform.Models.Post
+@{ ViewBag.Title = "Show"; }
+
+<h2>Afisare postare</h2>
+
+<p>@Model.Content</p>
+
+<br />
+
+<a class="btn btn-success" href="/Posts/Edit/@Model.PostId">Editeaza postarea</a>
+
+<form method="post" action="/Posts/Delete/@Model.PostId">
+
+    @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+    <button class="btn btn-danger" type="submit">Sterge postarea</button>
+
+</form>
+
+<br />
+
+@foreach (var comment in Model.Comments)
+{
+    @Html.Partial("CommentInfo", comment)
+    <br />
+}
+
+<br />
+
+<div class="container">
+    <form method="post" action="/Posts/Show/@Model.PostId">
+        <div class="panel-body">
+            <input type="hidden" name="PostId" value="@Model.PostId" />
+            <label>Continut comentariu</label>
+            <br />
+            <textarea class="form-control" name="Content"></textarea>
+            @Html.ValidationMessage("Content", "", new { @class = "text-danger" })
+            <br />
+            <button class="btn btn-success " type="submit">Posteaza comentariu</button>
+        </div>
+    </form>
+</div>
+
+<br />
+
+
+
