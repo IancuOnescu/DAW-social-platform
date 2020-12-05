@@ -23,7 +23,7 @@ namespace DAW_social_platform.Controllers
             Message mes = db.Messages.Find(id);
             db.Messages.Remove(mes);
             db.SaveChanges();
-            return Redirect("/Groups/Show/" + mes.groupId);
+            return Redirect("/Groups/Show/" + mes.GroupId);
         }
 
         public ActionResult Edit(int id)
@@ -41,10 +41,10 @@ namespace DAW_social_platform.Controllers
                 Message mes = db.Messages.Find(id);
                 if (TryUpdateModel(mes))
                 {
-                    mes.messageContent = requestMessage.messageContent;
+                    mes.MessageContent = requestMessage.MessageContent;
                     db.SaveChanges();
                 }
-                return Redirect("/Groups/Show/" + mes.groupId);
+                return Redirect("/Groups/Show/" + mes.GroupId);
             }
             catch (Exception e)
             {

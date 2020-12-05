@@ -8,23 +8,23 @@
 @using (Html.BeginForm(actionName: "New", controllerName: "Profiles"))
 {
 
-    @Html.Label("description", "Descriere")
+    @Html.Label("Description", "Descriere")
     <br />
-    @Html.TextBox("description", null, new { @class = "form-control" })
+    @Html.TextBox("Description", null, new { @class = "form-control" })
 
-    @Html.ValidationMessage("description", null, new { @class = "text-danger" })
-    <br />
-
-    @Html.Label("birthDate", "Data nasterii")
-    <br />
-    @Html.TextBox("birthDate", null, new { @class = "form-control" })
-
-    @Html.ValidationMessage("birthDate", null, new { @class = "text-danger" })
+    @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
     <br />
 
-    @Html.Label("hobbies", "Hobbies")
+    @Html.Label("BirthDate", "Data nasterii")
     <br />
-    @Html.TextBox("hobbies", null, new { @class = "form-control" })
+    @Html.TextBox("BirthDate", null, new { @class = "form-control datepicker" })
+
+    @Html.ValidationMessage("BirthDate", null, new { @class = "text-danger" })
+    <br />
+
+    @Html.Label("Hobbies", "Hobbies")
+    <br />
+    @Html.TextBox("Hobbies", null, new { @class = "form-control", @placeholder = "Introduceti data" })
 
 
     <button class="btn btn-sm btn-success" type="submit">Creeaza profilul</button>

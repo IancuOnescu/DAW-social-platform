@@ -9,18 +9,18 @@
 {
     @Html.HttpMethodOverride(HttpVerbs.Put)
 
-    @Html.Label("groupName", "Numele grupului")
+    @Html.Label("GroupName", "Numele grupului")
     <br />
-    @Html.Editor("groupName")
+    @Html.Editor("GroupName")
 
-    @Html.ValidationMessage("groupName", null, new { @class = "text-danger" })
+    @Html.ValidationMessage("GroupName", null, new { @class = "text-danger" })
     <br />
 
-    @Html.Label("description", "Descrierea grupului")
+    @Html.Label("Description", "Descrierea grupului")
     <br />
-    @Html.TextBox("description", null, new { @class = "form-control" })
+    @Html.TextBox("Description", null, new { @class = "form-control" })
 
-    @Html.ValidationMessage("description", null, new { @class = "text-danger" })
+    @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
 
 
     <button class="btn btn-sm btn-success" type="submit">Modifica grupul</button>

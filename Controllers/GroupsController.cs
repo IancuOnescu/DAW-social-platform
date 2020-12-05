@@ -33,7 +33,7 @@ namespace DAW_social_platform.Controllers
         [HttpPost]
         public ActionResult Show(Message message)
         {
-            message.date = DateTime.Now;
+            message.Date = DateTime.Now;
 
             try
             {
@@ -41,12 +41,12 @@ namespace DAW_social_platform.Controllers
                 {
                     db.Messages.Add(message);
                     db.SaveChanges();
-                    return Redirect("/Groups/Show/" + message.groupId);
+                    return Redirect("/Groups/Show/" + message.GroupId);
                 }
 
                 else
                 {
-                    Group group = db.Groups.Find(message.groupId);
+                    Group group = db.Groups.Find(message.GroupId);
                     return View(group);
                 }
 
@@ -54,7 +54,7 @@ namespace DAW_social_platform.Controllers
 
             catch (Exception e)
             {
-                Group group = db.Groups.Find(message.groupId);
+                Group group = db.Groups.Find(message.GroupId);
                 return View(group);
             }
         }
@@ -102,7 +102,7 @@ namespace DAW_social_platform.Controllers
 
                 if (TryUpdateModel(group))
                 {
-                    group.groupName = requestGroup.groupName;
+                    group.GroupName = requestGroup.GroupName;
                     db.SaveChanges();
                     TempData["message"] = "Grupul a fost modificat!";
                     return RedirectToAction("Index");

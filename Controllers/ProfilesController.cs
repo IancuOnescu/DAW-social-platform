@@ -34,9 +34,9 @@ namespace DAW_social_platform.Controllers
         {
             try
             {
-                var date = profile.birthDate;
-                profile.birthDate = Convert.ToDateTime(date);
-                profile.profileStatus = "Public";
+                var date = profile.BirthDate;
+                profile.BirthDate = Convert.ToDateTime(date);
+                profile.ProfileStatus = "Public";
                 if (ModelState.IsValid)
                 {
                     db.Profiles.Add(profile);
@@ -70,9 +70,9 @@ namespace DAW_social_platform.Controllers
 
                 if (TryUpdateModel(profile))
                 {
-                    profile.description = requestProfile.description;
-                    profile.birthDate = Convert.ToDateTime(requestProfile.birthDate);
-                    profile.hobbies = requestProfile.hobbies;
+                    profile.Description = requestProfile.Description;
+                    profile.BirthDate = Convert.ToDateTime(requestProfile.BirthDate);
+                    profile.Hobbies = requestProfile.Hobbies;
                     db.SaveChanges();
                     TempData["message"] = "Profilul a fost modificat!";
                     return RedirectToAction("Index");
