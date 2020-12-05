@@ -5,19 +5,19 @@
 
 <h2>Afisare grup</h2>
 
-<p>@Model.groupName</p>
+<p>@Model.GroupName</p>
 <br />
 
-<p>@Model.description</p>
+<p>@Model.Description</p>
 
 <br />
 
 
-<form method="post" action="/Groups/Delete/@Model.groupId">
+<form method="post" action="/Groups/Delete/@Model.GroupId">
 
     @Html.HttpMethodOverride(HttpVerbs.Delete)
 
-    <a class="btn btn-success" href="/Groups/Edit/@Model.groupId">Editeaza grupul</a>
+    <a class="btn btn-success" href="/Groups/Edit/@Model.GroupId">Editeaza grupul</a>
 
     <button class="btn btn-danger" type="submit">Sterge grupul</button>
 
@@ -25,7 +25,7 @@
 
 <br />
 
-@foreach (var message in Model.messages)
+@foreach (var message in Model.Messages)
 {
     @Html.Partial("MessageInfo", message)
     <br />
@@ -34,13 +34,13 @@
 <br />
 
 <div class="container">
-    <form method="post" action="/Groups/Show/@Model.groupId">
+    <form method="post" action="/Groups/Show/@Model.GroupId">
         <div class="panel-body">
-            <input type="hidden" name="groupId" value="@Model.groupId" />
+            <input type="hidden" name="groupId" value="@Model.GroupId" />
             <label>Continut mesaj</label>
             <br />
-            <textarea class="form-control" name="messageContent"></textarea>
-            @Html.ValidationMessage("messageContent", "", new { @class = "text-danger" })
+            <textarea class="form-control" name="MessageContent"></textarea>
+            @Html.ValidationMessage("MessageContent", "", new { @class = "text-danger" })
             <br />
             <button class="btn btn-success " type="submit">Trimite mesaj</button>
         </div>

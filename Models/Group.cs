@@ -9,11 +9,11 @@ namespace DAW_social_platform.Models
     public class Group
     {
         [Key]
-        public int groupId { get; set; }
+        public int GroupId { get; set; }
         [Required(ErrorMessage = "Numele grupului este obligatoriu")]
-        public string groupName { get; set; }
-        public string description { get; set; }
+        public string GroupName { get; set; }
+        public string Description { get; set; }
 
-        public virtual ICollection<Message> messages { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }

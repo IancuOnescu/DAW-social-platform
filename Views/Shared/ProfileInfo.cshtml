@@ -1,22 +1,22 @@
 ﻿<div>
     <p>Descriere:</p>
-    <p>@Model.description</p>
+    <p>@Model.Description</p>
     <br />
     <p>Data nasterii:</p>
-    <p>@Model.birthDate.ToString("dd/MM/yyyy")</p>
+    <p>@Model.BirthDate.ToShortDateString()</p>
     <br />
     <p>Hobbies:</p>
-    <p>@Model.hobbies</p>
+    <p>@Model.Hobbies</p>
     <br />
     <p>Status:</p>
-    <p>@Model.profileStatus</p>
+    <p>@Model.ProfileStatus</p>
     <br />
 
-    <form method="post" action="/Profiles/Delete/@Model.profileId">
+    <form method="post" action="/Profiles/Delete/@Model.ProfileId">
 
         @Html.HttpMethodOverride(HttpVerbs.Delete)
 
-        <a class="btn btn-success" href="/Profiles/Edit/@Model.profileId">Editeaza profilul</a>
+        <a class="btn btn-success" href="/Profiles/Edit/@Model.ProfileId">Editeaza profilul</a>
 
         <button class="btn btn-danger" type="submit">Sterge profilul</button>
 

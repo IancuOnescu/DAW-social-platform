@@ -4,11 +4,11 @@
 }
 
 <h2>Editeaza mesajul</h2>
-<form method="post" action="/Messages/Edit/@ViewBag.message.messageId">
+<form method="post" action="/Messages/Edit/@ViewBag.message.MessageId">
     @Html.HttpMethodOverride(HttpVerbs.Put)
     <label>Continut mesaj</label>
     <br />
-    <textarea name="messageContent">@ViewBag.message.messageContent</textarea>
+    <textarea name="MessageContent">@ViewBag.message.MessageContent</textarea>
     <br />
     <button class="btn btn-success" type="submit">Salveaza</button>
 </form>

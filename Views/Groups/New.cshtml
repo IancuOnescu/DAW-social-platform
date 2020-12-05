@@ -8,17 +8,17 @@
 @using (Html.BeginForm(actionName: "New", controllerName: "Groups"))
 {
 
-    @Html.Label("groupName", "Numele grupului")
+    @Html.Label("GroupName", "Numele grupului")
     <br />
-    @Html.TextBox("groupName", null, new { @class = "form-control" })
+    @Html.TextBox("GroupName", null, new { @class = "form-control" })
 
-    @Html.ValidationMessage("groupName", null, new { @class = "text-danger" })
+    @Html.ValidationMessage("GroupName", null, new { @class = "text-danger" })
 
-    @Html.Label("description", "Descrierea grupului")
+    @Html.Label("Description", "Descrierea grupului")
     <br />
-    @Html.TextBox("description", null, new { @class = "form-control" })
+    @Html.TextBox("Description", null, new { @class = "form-control" })
 
-    @Html.ValidationMessage("description", null, new { @class = "text-danger" })
+    @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
 
     <button class="btn btn-sm btn-success" type="submit">Creeaza grup</button>
 
