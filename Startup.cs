@@ -13,6 +13,7 @@ namespace DAW_social_platform
         {
             ConfigureAuth(app);
             CreateAdminUserAndApplicationRoles();
+            CreateGroupRoles();
         }
         private void CreateAdminUserAndApplicationRoles()
         {
@@ -49,6 +50,51 @@ namespace DAW_social_platform
                 var role = new IdentityRole();
                 role.Name = "User";
                 roleManager.Create(role);
+            }
+        }
+        public void CreateGroupRoles()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            var roles = db.GroupRoles;
+
+            var creatorFound = false;
+            var adminFound = false;
+            var userFound = false;
+            foreach (GroupRoles role in roles)
+            {
+                if (role.RoleName == "Creator")
+                {
+                    creatorFound = true;
+                }
+                if (role.RoleName == "Admin")
+                {
+                    adminFound = true;
+                }
+                if (role.RoleName == "User")
+                {
+                    userFound = true;
+                }
+            }
+            if (!creatorFound)
+            {
+                var newRole = new GroupRoles();
+                newRole.RoleName = "Creator";
+                db.GroupRoles.Add(newRole);
+                db.SaveChanges();
+            }
+            if (!adminFound)
+            { 
+                var newRole = new GroupRoles();
+                newRole.RoleName = "Admin";
+                db.GroupRoles.Add(newRole);
+                db.SaveChanges();
+            }
+            if (!userFound)
+            {
+                var newRole = new GroupRoles();
+                newRole.RoleName = "User";
+                db.GroupRoles.Add(newRole);
+                db.SaveChanges();
             }
         }
     }
