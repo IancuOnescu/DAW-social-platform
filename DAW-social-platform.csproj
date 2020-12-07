@@ -273,7 +273,6 @@
     <Content Include="Views\Posts\Index.cshtml" />
     <Content Include="Views\Posts\New.cshtml" />
     <Content Include="Views\Posts\Show.cshtml" />
-    <Content Include="Views\Shared\CommentInfo.cshtml" />
     <Content Include="Views\Comments\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>

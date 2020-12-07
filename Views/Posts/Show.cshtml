@@ -4,26 +4,58 @@
 <h2>Afisare postare</h2>
 
 <p>@Model.Content</p>
-
+<br />
+<span class="label label-success">@Model.Date</span>
+<br />
+<i class="glyphicon glyphicon-user"></i> <i>postata de</i> <strong> @Model.User.UserName </strong>
 <br />
 
-<a class="btn btn-success" href="/Posts/Edit/@Model.PostId">Editeaza postarea</a>
-
-<form method="post" action="/Posts/Delete/@Model.PostId">
-
-    @Html.HttpMethodOverride(HttpVerbs.Delete)
-
-    <button class="btn btn-danger" type="submit">Sterge postarea</button>
-
-</form>
+@if (ViewBag.afisareButoane == true && Model.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
+{
+<div class="panel-footer">
+    <a class="btn btn-success pull-left" href="/Posts/Edit/@Model.PostId">
+        Modifica Postarea
+    </a>
+    @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = @Model.PostId }))
+    {
+@Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button class="btn btn-danger pull-right" type="submit">
+                        Sterge Postarea
+                    </button>}
+    <div class="clearfix"></div>
+</div>}
+</div>
 
 <br />
 
 @foreach (var comment in Model.Comments)
 {
-    @Html.Partial("CommentInfo", comment)
-    <br />
-}
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div>
+                <p>@comment.Content</p>
+                <small class="pull-right">@Model.Date</small>
+                <i class="glyphicon glyphicon-user"></i> <i>scris de</i> <strong> @comment.User.UserName </strong>
+            </div>
+            @if (comment.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
+            {
+                <div style="display: inline-block; float : left; margin-right: 15px">
+                    <a class="glyphicon glyphicon-pencil" href="/Comments/Edit/@comment.CommentId"></a>
+                </div>
+                <div style="display: inline-block; float : left">
+                    <form method="post" action="/Comments/Delete/@comment.CommentId">
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+                <hr />}
 
 <br />
 
@@ -31,7 +63,7 @@
     <form method="post" action="/Posts/Show/@Model.PostId">
         <div class="panel-body">
             <input type="hidden" name="PostId" value="@Model.PostId" />
-            <label>Continut comentariu</label>
+            <label>Scrie un comentariu</label>
             <br />
             <textarea class="form-control" name="Content"></textarea>
             @Html.ValidationMessage("Content", "", new { @class = "text-danger" })

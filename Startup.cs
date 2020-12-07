@@ -39,10 +39,10 @@ namespace DAW_social_platform
                     UserManager.AddToRole(user.Id, "Admin");
                 }
             }
-            if (!roleManager.RoleExists("Editor"))
+            if (!roleManager.RoleExists("Visualiser"))
             {
                 var role = new IdentityRole();
-                role.Name = "Editor";
+                role.Name = "Visualiser";
                 roleManager.Create(role);
             }
             if (!roleManager.RoleExists("User"))
