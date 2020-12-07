@@ -14,8 +14,10 @@
 @foreach (DAW_social_platform.Models.Group group in ViewBag.groups)
  {
     <div>
-        <div>@group.GroupName</div>
+        <p><b>@group.GroupName</b></p>
         <br />
+        <p>Created by <b>@group.User.UserName</b></p>
+
         <a class="btn btn-success" href="/Groups/Show/@group.GroupId">Afisare grup</a>
     </div>
     <hr />

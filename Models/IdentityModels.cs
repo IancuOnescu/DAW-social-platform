@@ -27,7 +27,7 @@ namespace DAW_social_platform.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext,
-            DAW_social_platform.Migrations.Configuration>("DefaultConnection"));
+                    DAW_social_platform.Migrations.Configuration>("DefaultConnection"));
         }
 
         public DbSet<Group> Groups { get; set; }
@@ -35,6 +35,9 @@ namespace DAW_social_platform.Models
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<GroupRoles> GroupRoles { get; set; }
+        public DbSet<GroupUsers> GroupUsers { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
