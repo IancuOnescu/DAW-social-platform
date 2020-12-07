@@ -5,7 +5,9 @@
 
 @using (Html.BeginForm(actionName: "New", controllerName: "Posts"))
 {
-
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+ 
+    @Html.TextBox("Content", null, new { @class = "form-control" })
     @Html.Label("Content", "Continutul postarii")
     <br />
     @Html.TextBox("Content", null, new { @class = "form-control" })

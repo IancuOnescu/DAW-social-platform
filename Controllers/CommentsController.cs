@@ -1,4 +1,5 @@
 ﻿using DAW_social_platform.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,39 +12,67 @@ namespace DAW_social_platform.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Comments
+        [Authorize(Roles = "User,Visitor,Admin")]
         public ActionResult Index()
         {
             return View();
         }
-
+        [Authorize(Roles = "User,Admin")]
         [HttpDelete]
         public ActionResult Delete(int id)
         {
             Comment comment = db.Comments.Find(id);
-            db.Comments.Remove(comment);
-            db.SaveChanges();
+            if (comment.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            {
+                db.Comments.Remove(comment);
+                db.SaveChanges();
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui comentariu care nu va apartine";
+            }
             return Redirect("/Posts/Show/" + comment.PostId);
         }
 
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Edit(int id)
         {
             Comment comment = db.Comments.Find(id);
-            ViewBag.comment = comment;
+            if (comment.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+            {
+                ViewBag.comment = comment;
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unei postari care nu va apartine";
+                return Redirect("/Posts/Show/" + comment.PostId);
+            }
             return View();
         }
 
+        [Authorize(Roles = "User,Admin")]
         [HttpPut]
         public ActionResult Edit(int id, Comment requestComment)
         {
             try
             {
                 Comment comment = db.Comments.Find(id);
-                if (TryUpdateModel(comment))
+                if (comment.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
                 {
-                    comment.Content = requestComment.Content;
-                    db.SaveChanges();
+                    if (TryUpdateModel(comment))
+                    {
+                        comment.Content = requestComment.Content;
+                        comment.Date = DateTime.Now;
+                        comment.UserId = User.Identity.GetUserId();
+                        db.SaveChanges();
+                    }
+                    return Redirect("/Posts/Show/" + comment.PostId);
                 }
-                return Redirect("/Posts/Show/" + comment.PostId);
+                else
+                {
+                    TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra uneri postari care nu va apartine";
+                    return Redirect("/Posts/Show/" + comment.PostId);
+                }
             }
             catch (Exception e)
             {
