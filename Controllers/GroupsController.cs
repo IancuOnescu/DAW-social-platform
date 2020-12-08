@@ -23,17 +23,31 @@ namespace DAW_social_platform.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
 
-            var groups = from Group in db.Groups
-                         select Group;
-            ViewBag.groups = groups.ToList();
+            ViewBag.groups = db.Groups.Include("User");
             return View();
         }
 
         public ActionResult Show(int id)
         {
-            if (GroupAuth.IsAllowedToEnter(id, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            var currentUserId = User.Identity.GetUserId();
+            if (GroupAuth.IsAllowedToEnter(id, currentUserId) || User.IsInRole("Admin"))
             {
                 Group group = db.Groups.Find(id);
+
+                ViewBag.isGroupAdminCreatorOrAppAdmin = false;
+                ViewBag.showEditButton = false;
+                if (GroupAuth.IsAllowedToEdit(id, currentUserId) || User.IsInRole("Admin"))
+                {
+                    ViewBag.showEditButton = true;
+                    ViewBag.isGroupAdminCreatorOrAppAdmin = true;
+                }
+                ViewBag.showDeleteButton = false;
+                if (GroupAuth.IsAllowedToDelete(id, currentUserId) || User.IsInRole("Admin"))
+                {
+                    ViewBag.showDeleteButton = true;
+                }
+                ViewBag.currentUserId = currentUserId;
+
                 return View(group);
             }
             else
@@ -48,7 +62,7 @@ namespace DAW_social_platform.Controllers
             if (GroupAuth.IsAllowedToEnter(message.GroupId, User.Identity.GetUserId()) || User.IsInRole("Admin"))
             {
                 message.Date = DateTime.Now;
-
+                message.UserId = User.Identity.GetUserId();
                 try
                 {
                     if (ModelState.IsValid)
@@ -57,7 +71,6 @@ namespace DAW_social_platform.Controllers
                         db.SaveChanges();
                         return Redirect("/Groups/Show/" + message.GroupId);
                     }
-
                     else
                     {
                         Group group = db.Groups.Find(message.GroupId);

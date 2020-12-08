@@ -11,20 +11,19 @@
 <br />
 
 @if (ViewBag.afisareButoane == true && Model.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
-{
-<div class="panel-footer">
-    <a class="btn btn-success pull-left" href="/Posts/Edit/@Model.PostId">
-        Modifica Postarea
-    </a>
-    @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = @Model.PostId }))
-    {
-@Html.HttpMethodOverride(HttpVerbs.Delete)
-                    <button class="btn btn-danger pull-right" type="submit">
-                        Sterge Postarea
-                    </button>}
-    <div class="clearfix"></div>
-</div>}
-</div>
+ {
+    <div class="panel-footer">
+        <a class="btn btn-success pull-left" href="/Posts/Edit/@Model.PostId">
+            Modifica Postarea
+        </a>
+        @using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = @Model.PostId }))
+        {
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <button class="btn btn-danger pull-right" type="submit"> Sterge Postarea</button>
+        }
+        <div class="clearfix"></div>
+    </div>
+ }
 
 <br />
 

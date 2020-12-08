@@ -16,10 +16,14 @@
 <form method="post" action="/Groups/Delete/@Model.GroupId">
 
     @Html.HttpMethodOverride(HttpVerbs.Delete)
-
-    <a class="btn btn-success" href="/Groups/Edit/@Model.GroupId">Editeaza grupul</a>
-
-    <button class="btn btn-danger" type="submit">Sterge grupul</button>
+    @if (ViewBag.showEditButton)
+    {
+        <a class="btn btn-success" href="/Groups/Edit/@Model.GroupId">Editeaza grupul</a>
+    }
+    @if (ViewBag.showDeleteButton)
+    {
+        <button class="btn btn-danger" type="submit">Sterge grupul</button>
+    }
 
 </form>
 
@@ -27,7 +31,38 @@
 
 @foreach (var message in Model.Messages)
 {
-    @Html.Partial("MessageInfo", message)
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div>
+                    <p>@message.MessageContent</p>
+                    <small class="pull-right">@message.Date</small>
+                </div>
+
+                <div>
+                    <p>Sent by <b>@message.User.UserName</b></p>
+                </div>
+
+                @if (message.UserId == ViewBag.currentUserId || ViewBag.isGroupAdminCreatorOrAppAdmin)
+                {
+                    <div style="display: inline-block; float : left; margin-right: 15px">
+                        <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
+                    </div>
+
+                    <div style="display: inline-block; float : left">
+                        <form method="post" action="/Messages/Delete/@message.MessageId">
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                        </form>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <hr />
     <br />
 }
 
@@ -36,7 +71,7 @@
 <div class="container">
     <form method="post" action="/Groups/Show/@Model.GroupId">
         <div class="panel-body">
-            <input type="hidden" name="groupId" value="@Model.GroupId" />
+            <input type="hidden" name="GroupId" value="@Model.GroupId" />
             <label>Continut mesaj</label>
             <br />
             <textarea class="form-control" name="MessageContent"></textarea>

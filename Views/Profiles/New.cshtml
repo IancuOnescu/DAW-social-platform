@@ -26,6 +26,12 @@
     <br />
     @Html.TextBox("Hobbies", null, new { @class = "form-control", @placeholder = "Introduceti data" })
 
+    @Html.Label("Status", "Vizibilitatea profilului: ")
+
+    <p>Public @Html.RadioButton("Status", true)</p>
+    <p>Private @Html.RadioButton("Status", false)</p> 
+
+    <br />
 
     <button class="btn btn-sm btn-success" type="submit">Creeaza profilul</button>
 

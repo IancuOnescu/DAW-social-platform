@@ -18,7 +18,7 @@
 
     <label>
         Data nasterii
-        <input class="form-control datepicker" type="text" name="BirthDate" value="@Model.BirthDate.ToShortDateString()"/>
+        <input class="form-control datepicker" type="text" name="BirthDate" value="@Model.BirthDate.ToShortDateString()" />
     </label>
     <br />
 
@@ -28,6 +28,14 @@
     @Html.Label("Hobbies", "Hobbies")
     <br />
     @Html.TextBox("Hobbies", null, new { @class = "form-control" })
+
+    @Html.Label("Status", "Vizibilitatea profilului: ")
+
+    <p>Public @Html.RadioButton("Status", true)</p>
+    <p>Private @Html.RadioButton("Status", false)</p>
+
+
+    <br />
 
 
     <button class="btn btn-sm btn-success" type="submit">Editeaza profilul</button>

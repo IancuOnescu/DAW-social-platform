@@ -36,7 +36,6 @@ namespace DAW_social_platform.Controllers
             {
                 var date = profile.BirthDate;
                 profile.BirthDate = Convert.ToDateTime(date);
-                profile.ProfileStatus = "Public";
                 if (ModelState.IsValid)
                 {
                     db.Profiles.Add(profile);
