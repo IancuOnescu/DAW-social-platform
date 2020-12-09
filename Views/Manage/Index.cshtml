@@ -25,16 +25,30 @@
         <dd>
             @Html.ActionLink("Change your username", "ChangeUsername")
         </dd>
-        <dt>External Logins:</dt>
+        <dd>
+            @if (Model.ProfileId == -1)
+            {
+                <a class="btn btn-primary" href="/Profiles/New">Creeaza profil</a>
+            }
+            else
+            {
+                <a class="btn btn-primary" href="/Profiles/Show/@Model.ProfileId">Vizualizeaza profil</a>
+                <a class="btn btn-success" href="/Profiles/Edit/@Model.ProfileId">Editeaza profil</a>
+                <form method="post" action="/Profiles/Delete/@Model.ProfileId">
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button class="btn btn-danger" type="submit">Sterge profilul</button>
+                </form>
+            }
+        </dd>
+        @*<dt>External Logins:</dt>
         <dd>
             @Model.Logins.Count 
             @Html.ActionLink("Manage", "ManageLogins") 
-        </dd>
-        <dt>Delete Account</dt>
+        </dd>*@
         <dd>
             <form method="post" action="/Manage/Delete">
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button type="submit">Sterge Contul</button>
+                <button class="btn btn-danger" type="submit">Sterge Contul</button>
             </form>
         </dd>
         @*
