@@ -32,9 +32,9 @@ namespace DAW_social_platform.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -71,7 +71,8 @@ namespace DAW_social_platform.Controllers
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                ProfileId = GetProfileId()
             };
             return View(model);
         }
@@ -303,7 +304,7 @@ namespace DAW_social_platform.Controllers
                     }
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeUsernameSucces});
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeUsernameSucces });
             }
 
             // If we got this far, something failed, redisplay form
@@ -371,7 +372,7 @@ namespace DAW_social_platform.Controllers
         {
             var userId = User.Identity.GetUserId();
             var user = await UserManager.FindByIdAsync(userId);
-            if(user == null)
+            if (user == null)
             {
                 return View("Error");
             }
@@ -385,6 +386,20 @@ namespace DAW_social_platform.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 return View("Error");
+            }
+        }
+
+        public int GetProfileId()
+        {
+            var userId = User.Identity.GetUserId();
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                Profile profile = (from pr in db.Profiles
+                                   where pr.UserId == userId
+                                   select pr).FirstOrDefault();
+                if (profile == null)
+                    return -1;
+                return profile.ProfileId;
             }
         }
 

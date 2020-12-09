@@ -12,7 +12,7 @@ namespace DAW_social_platform.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Posts
-        [Authorize(Roles = "User,Visitor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Index()
         {
             if (TempData.ContainsKey("message"))
@@ -25,7 +25,7 @@ namespace DAW_social_platform.Controllers
             return View();
         }
 
-        [Authorize(Roles = "User,Visitor,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Show(int id)
         {
             Post post = db.Posts.Find(id);

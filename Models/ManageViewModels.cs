@@ -12,6 +12,7 @@ namespace DAW_social_platform.Models
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
+        public int ProfileId { get; set; }
     }
 
     public class ManageLoginsViewModel

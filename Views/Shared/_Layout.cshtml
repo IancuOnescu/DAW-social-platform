@@ -23,12 +23,20 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Afisare grupuri", "Index", "Groups")</li>
-                    <li>@Html.ActionLink("Afisare profiluri", "Index", "Profiles")</li>
-                    <li>@Html.ActionLink("Afisare Postari", "Index", "Posts")</li>
-                    <li>@Html.ActionLink("News Feed", "About", "Home")</li>
-                    <li>@Html.ActionLink("Groups", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Friends", "AllUsers", "Account")</li>
+                    <li>@Html.ActionLink("Search placeholder", "Index", "Home")</li>
+                    @if (User.IsInRole("User"))
+                    {
+                        <li>@Html.ActionLink("Feed", "Index", "Posts")</li>
+                        <li>@Html.ActionLink("Prieteni", "AllUsers", "Account")</li>
+                        <li>@Html.ActionLink("Grupuri", "Index", "Groups")</li>
+                        <li>@Html.ActionLink("Requests placeholder", "Index", "Home")</li>
+                    }
+                    else if (User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Posts", "Index", "Posts")</li>
+                        <li>@Html.ActionLink("Users", "AllUsers", "Account")</li>
+                        <li>@Html.ActionLink("Groups", "Index", "Groups")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
