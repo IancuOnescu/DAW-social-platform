@@ -10,6 +10,7 @@ namespace DAW_social_platform.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(DAW_social_platform.Models.ApplicationDbContext context)

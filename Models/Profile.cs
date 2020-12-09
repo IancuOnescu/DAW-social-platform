@@ -15,7 +15,9 @@ namespace DAW_social_platform.Models
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         public string Hobbies { get; set; }
-        public string ProfileStatus { get; set; }
+        [Required]
+        public bool Status { get; set; }    //  true == public and false == private
+        public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
     }
