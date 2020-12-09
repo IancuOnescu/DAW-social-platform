@@ -1,4 +1,5 @@
-﻿using DAW_social_platform.Models;
+﻿using DAW_social_platform.Infrastructure;
+using DAW_social_platform.Models;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,14 @@ namespace DAW_social_platform.Controllers
     public class MessagesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private GroupAuthorization GroupAuth = new GroupAuthorization();
+ 
 
         [HttpDelete]
         public ActionResult Delete(int id)
         {
             Message mes = db.Messages.Find(id);
-            if (User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
+            if (GroupAuth.IsAllowedToDelete(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
             {
                 db.Messages.Remove(mes);
                 db.SaveChanges();
@@ -32,7 +35,7 @@ namespace DAW_social_platform.Controllers
         public ActionResult Edit(int id)
         {
             Message mes = db.Messages.Find(id);
-            if (User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
+            if (GroupAuth.IsAllowedToEdit(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
             {
                 ViewBag.message = mes;
                 return View();
@@ -50,7 +53,7 @@ namespace DAW_social_platform.Controllers
             try
             {
                 Message mes = db.Messages.Find(id);
-                if (User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
+                if (GroupAuth.IsAllowedToEdit(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
                 {
                     if (TryUpdateModel(mes))
                     {

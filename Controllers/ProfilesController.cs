@@ -72,6 +72,8 @@ namespace DAW_social_platform.Controllers
                     profile.Description = requestProfile.Description;
                     profile.BirthDate = Convert.ToDateTime(requestProfile.BirthDate);
                     profile.Hobbies = requestProfile.Hobbies;
+                    profile.Status = requestProfile.Status;
+                    profile.UserId = requestProfile.UserId;
                     db.SaveChanges();
                     TempData["message"] = "Profilul a fost modificat!";
                     return RedirectToAction("Index");
