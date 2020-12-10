@@ -20,7 +20,7 @@ namespace DAW_social_platform.Controllers
         public ActionResult Delete(int id)
         {
             Message mes = db.Messages.Find(id);
-            if (GroupAuth.IsAllowedToDelete(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
+            if (GroupAuth.IsAdminOrCreator(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
             {
                 db.Messages.Remove(mes);
                 db.SaveChanges();
@@ -35,7 +35,7 @@ namespace DAW_social_platform.Controllers
         public ActionResult Edit(int id)
         {
             Message mes = db.Messages.Find(id);
-            if (GroupAuth.IsAllowedToEdit(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
+            if (GroupAuth.IsAdminOrCreator(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
             {
                 ViewBag.message = mes;
                 return View();
@@ -53,7 +53,7 @@ namespace DAW_social_platform.Controllers
             try
             {
                 Message mes = db.Messages.Find(id);
-                if (GroupAuth.IsAllowedToEdit(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
+                if (GroupAuth.IsAdminOrCreator(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
                 {
                     if (TryUpdateModel(mes))
                     {

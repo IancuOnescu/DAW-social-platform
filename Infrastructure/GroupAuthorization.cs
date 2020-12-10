@@ -10,7 +10,7 @@ namespace DAW_social_platform.Infrastructure
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public bool IsAllowedToEnter(int groupId, string userId)
+        public bool IsUserOrAdminOrCreator(int groupId, string userId)
         {
             var userRole = (from gu in db.GroupUsers
                             where gu.UserId == userId && gu.GroupId == groupId
@@ -26,7 +26,7 @@ namespace DAW_social_platform.Infrastructure
             }
         }
 
-        public bool IsAllowedToEdit(int groupId, string userId)
+        public bool IsAdminOrCreator(int groupId, string userId)
         {
             var userRole = (from gu in db.GroupUsers
                             where gu.UserId == userId && gu.GroupId == groupId
@@ -42,7 +42,7 @@ namespace DAW_social_platform.Infrastructure
             }
         }
 
-        public bool IsAllowedToDelete(int groupId, string userId)
+        public bool IsCreator(int groupId, string userId)
         {
             var userRole = (from gu in db.GroupUsers
                             where gu.UserId == userId && gu.GroupId == groupId
