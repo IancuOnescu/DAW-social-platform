@@ -17,7 +17,7 @@
 
     @Html.Label("BirthDate", "Data nasterii")
     <br />
-    @Html.TextBox("BirthDate", null, new { @class = "form-control datepicker" })
+    @Html.TextBox("BirthDate", null, new { @class = "form-control" })
 
     @Html.ValidationMessage("BirthDate", null, new { @class = "text-danger" })
     <br />
@@ -25,11 +25,13 @@
     @Html.Label("Hobbies", "Hobbies")
     <br />
     @Html.TextBox("Hobbies", null, new { @class = "form-control", @placeholder = "Introduceti data" })
+    <br />
+    <br />
 
     @Html.Label("Status", "Vizibilitatea profilului: ")
 
-    <p>Public @Html.RadioButton("Status", true)</p>
-    <p>Private @Html.RadioButton("Status", false)</p> 
+    <p>Public @Html.RadioButton("Status", true, new { @checked = "checked" })</p>
+    <p>Private @Html.RadioButton("Status", false)</p>
 
     <br />
 

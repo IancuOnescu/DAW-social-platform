@@ -3,25 +3,85 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index Groups</h2>
-
 @if (TempData.ContainsKey("message"))
- {
+{
     <h1>@ViewBag.message</h1>
- }
+}
 <br />
 
-@foreach (DAW_social_platform.Models.Group group in ViewBag.groups)
- {
-    <div>
-        <p><b>@group.GroupName</b></p>
-        <br />
-        <p>Created by <b>@group.User.UserName</b></p>
-
-        <a class="btn btn-success" href="/Groups/Show/@group.GroupId">Afisare grup</a>
+@if (ViewBag.isAdmin)
+{
+    <div class="title create-group-title col-md-12">
+        <h2>All Groups</h2>
+        <a class="btn btn-primary" href="/Groups/New">Creeaza grup nou</a>
     </div>
-    <hr />
- }
-<br />
-<a class="btn btn-primary" href="/Groups/New">Creeaza grup nou</a>
+    foreach (DAW_social_platform.Models.Group group in ViewBag.allGroups)
+    {
+        @Html.Partial("GroupInfo", group)
+    }
+    <br />
+}
+else
+{
+    <div class="title create-group-title col-md-12">
+        <h2>Your Groups</h2>
+        <a class="btn btn-primary" href="/Groups/New">Creeaza grup nou</a>
+    </div>
+
+    if (ViewBag.creatorGroups.Count == 0)
+    {
+        <div class="col-md-12">
+            <h4>Maybe it's time to create one?</h4>
+        </div>
+    }
+    else
+    {
+        foreach (DAW_social_platform.Models.Group group in ViewBag.creatorGroups)
+        {
+            @Html.Partial("GroupInfo", group)
+        }
+    }
+    <br />
+
+    <div class="title col-md-12">
+        <h2>Admin</h2>
+    </div>
+
+    if (ViewBag.adminGroups.Count == 0)
+    {
+        <div class="col-md-12">
+            <h4>Nope.</h4>
+        </div>
+    }
+    else
+    {
+        foreach (DAW_social_platform.Models.Group group in ViewBag.adminGroups)
+        {
+            @Html.Partial("GroupInfo", group)
+        }
+    }
+    <br />
+
+    <div class="title col-md-12">
+        <h2>Other Groups You've Joined</h2>
+    </div>
+
+
+    if (ViewBag.userGroups.Count == 0)
+    {
+        <div class="col-md-12">
+            <h4>Nothing to show :(</h4>
+        </div>
+    }
+    else
+    {
+        foreach (DAW_social_platform.Models.Group group in ViewBag.userGroups)
+        {
+            @Html.Partial("GroupInfo", group)
+        }
+    }
+    <br />
+}
+
+
 

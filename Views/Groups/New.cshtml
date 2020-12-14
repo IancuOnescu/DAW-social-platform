@@ -3,23 +3,20 @@
     ViewBag.Title = "create group";
 }
 
-<h2>Creeaza grup</h2>
+<div class="title col-md-12" style="padding: 0;">
+    <h2>Creeaza un grup nou</h2>
+</div>
 
-@using (Html.BeginForm(actionName: "New", controllerName: "Groups"))
-{
-
+<form class="form col-md-4" action="/Groups/New" method="POST">
     @Html.Label("GroupName", "Numele grupului")
-    <br />
     @Html.TextBox("GroupName", null, new { @class = "form-control" })
-
     @Html.ValidationMessage("GroupName", null, new { @class = "text-danger" })
-
-    @Html.Label("Description", "Descrierea grupului")
     <br />
+    <br />
+    @Html.Label("Description", "Descrierea grupului")
     @Html.TextBox("Description", null, new { @class = "form-control" })
-
     @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
 
+    <br />
     <button class="btn btn-sm btn-success" type="submit">Creeaza grup</button>
-
-}
+</form>
