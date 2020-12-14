@@ -15,7 +15,7 @@ namespace DAW_social_platform.Models
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
         public string Hobbies { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Selectati vizibilitatea profilului!")]
         public bool Status { get; set; }    //  true == public and false == private
         public string UserId { get; set; }
 

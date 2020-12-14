@@ -1,12 +1,23 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    padding-top: 60px;
 }
+
+:root {
+    --main-shadow: 0 1px 5px -1px rgba(0,0,0,.23);
+    --main-color: #55efc4;
+    --second-color: #00b894;
+    --third-color: #00cec9;
+    --fourth-color: #0984e3;
+    --danger-color: #ff7675;
+    --danger-color-hover: #d63031;
+    --best-grey: #eeeeee;
+}
+
+
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0 15px 15px 15px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -24,15 +35,196 @@ textarea {
 }
 
 .navbar {
-    background-color: #dadada;
+    background-color: var(--main-color);
     border: none;
-    box-shadow: 0 6px 12px #dadada;
 }
 
 .navbar a {
-    color: #2c2c2c;
+    font-size: 17px;
+    color: #000000;
+    border-radius: 10px;
+    padding: 10px !important;
+    margin-top: 5px;
+    margin-left: 2px;
+}
+.navbar-brand {
+    height: auto !important;
+}
+.navbar a:hover {
+    color: white;
+    background-color: var(--second-color) !important;
 }
 
-.navbar a:hover {
-    color: #5cb85c;
+.body-content{
+    min-height: calc(100vh - 110px);
+}
+
+/*  Main Title  */
+.title{
+    margin: 10px 0;
+    border-bottom: 2px solid var(--third-color);
+    padding: 5px;
+    font-size: 22px;
+    width: 100%;
+    border-radius: 10px;
+}
+.create-group-title{
+    height: 42px;
+}
+.title > h2 {
+    float: left;
+    font-size: 22px;
+    margin: 0;
+    padding: 5px;
+}
+.title > a {
+    float: right;
+    background-color: var(--third-color);
+    border: 0;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+.title > a:hover {
+    background-color: var(--fourth-color);
+}
+
+
+/*  GROUPS  */
+.group-main-wrapper{
+    padding: 0 10px 10px 0;
+}
+.group-wrapper {
+    border-radius: 10px;
+    box-shadow: var(--main-shadow);
+    padding: 10px;
+    text-align: center;
+}
+
+.group-wrapper > h2{
+    margin: 0 0 10px 0;
+
+}
+.group-wrapper > a {
+    margin: 0 auto;
+    border-radius: 10px;
+    background-color: var(--second-color);
+    transition: background-color 0.3s;
+    border: 0;
+}
+.group-wrapper > a:hover {
+    background-color: #0984e3;
+}
+
+/* Group Header*/
+.group-header {
+    text-align: center;
+    box-shadow: var(--main-shadow);
+    border-radius: 10px;
+}
+.group-header > *{
+    margin: 0;
+}
+.group-info{
+    float:left;
+}
+.group-actions{
+    margin: 10px;
+    width: 150px;
+    float: right;
+}
+.group-actions>*{
+    width: 100%;
+    border-radius:10px;
+    border:0;
+    transition: background-color 0.3s;
+    margin-top: 12px;
+}
+.group-actions > a{
+    background-color: var(--second-color);
+}
+.group-actions > a:hover{
+    background-color: var(--fourth-color);
+}
+.group-actions > button{
+    background-color: var(--danger-color);
+}
+.group-actions > button:hover{
+    background-color: var(--danger-color-hover);
+}
+/*Group Messsages*/
+.messages-container {
+    padding: 10px;
+    border-radius: 10px 0 0 10px;
+    border-top: 2px solid var(--third-color);
+    border-bottom: 2px solid var(--third-color);
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+}
+.messages-container::-webkit-scrollbar {
+    width: 2px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+    background: #dfdfdf;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+    background: var(--fourth-color);
+}
+
+.message{
+    padding: 10px;
+    border-bottom: 1px solid var(--best-grey);
+}
+.message:last-child {
+    border-top: 1px solid var(--second-color);
+    border: 0;
+}
+.message:last-child>.row>.info::before{
+    content: "Newest";
+}
+.send-message-container {
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: var(--main-shadow);
+}
+.send-message-container button{
+    border-radius: 8px;
+    border: 0;
+    transition: background-color 0.3s;
+    background-color: var(--second-color);
+}
+.send-message-container button:hover{
+    background-color: var(--fourth-color);
+}
+
+
+
+/* FORMS INPUT */
+.form {
+    padding: 10px;
+    box-shadow: var(--main-shadow);
+    border-radius: 10px;
+}
+
+.form>button{
+    border-radius: 8px;
+    border: 0;
+    background-color: var(--second-color);
+    transition: background-color 0.3s;
+}
+.form>button:hover{
+    background-color: var(--fourth-color);
+}
+
+
+footer {
+    background-color: white;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 1px 5px -1px rgba(0,0,0,.23);
+    height: 50px;
+    line-height: 50px;
 }

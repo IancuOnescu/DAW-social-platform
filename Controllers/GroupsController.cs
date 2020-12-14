@@ -23,7 +23,36 @@ namespace DAW_social_platform.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
 
-            ViewBag.groups = db.Groups.Include("User");
+            var creatorRoleId = (from r in db.GroupRoles
+                            where r.RoleName == "Creator"
+                            select r.RoleId).FirstOrDefault();
+            var adminRoleId = (from r in db.GroupRoles
+                             where r.RoleName == "Admin"
+                             select r.RoleId).FirstOrDefault();
+            var userRoleId = (from r in db.GroupRoles
+                           where r.RoleName == "User"
+                           select r.RoleId).FirstOrDefault();
+            var currentUserId = User.Identity.GetUserId();
+
+            ViewBag.creatorGroups = (from g in db.Groups
+                                     join gu in db.GroupUsers on g.GroupId equals gu.GroupId
+                                     where gu.UserId == currentUserId && gu.RoleId == creatorRoleId
+                                     select g).ToList();
+            ViewBag.adminGroups = (from g in db.Groups
+                                  join gu in db.GroupUsers on g.GroupId equals gu.GroupId
+                                  where gu.UserId == currentUserId && gu.RoleId == adminRoleId
+                                  select g).ToList();
+            ViewBag.userGroups = (from g in db.Groups
+                                 join gu in db.GroupUsers on g.GroupId equals gu.GroupId
+                                  where gu.UserId == currentUserId && gu.RoleId == userRoleId
+                                  select g).ToList();
+            var isAdmin = User.IsInRole("Admin");
+            ViewBag.isAdmin = isAdmin;
+            if (isAdmin)
+            {
+                ViewBag.allGroups = db.Groups.ToList();
+            }
+
             return View();
         }
 
