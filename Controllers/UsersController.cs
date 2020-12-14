@@ -13,16 +13,18 @@ namespace DAW_social_platform.Controllers
     {
         // GET: Users
         private ApplicationDbContext db = ApplicationDbContext.Create();
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "User, Admin")]
         public ActionResult Index()
         {
             var users = from user in db.Users
                         orderby user.UserName
                         select user;
+            var profiles = db.Profiles.ToList();
             ViewBag.UsersList = users;
+            ViewBag.Profiles = profiles;
             return View();
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Show
         public ActionResult Show(string id)
         {

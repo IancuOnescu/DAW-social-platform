@@ -28,7 +28,7 @@
                     @if (User.IsInRole("User"))
                     {
                         <li>@Html.ActionLink("Feed", "Index", "Posts")</li>
-                        <li>@Html.ActionLink("Prieteni", "AllUsers", "Account")</li>
+                        <li>@Html.ActionLink("Prieteni", "Index", "Users")</li>
                         <li>@Html.ActionLink("Grupuri", "Index", "Groups")</li>
                         <li>@Html.ActionLink("Requests placeholder", "Index", "Home")</li>
                     }

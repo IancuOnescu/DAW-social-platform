@@ -26,6 +26,23 @@ namespace DAW_social_platform.Controllers
             return View();
         }
 
+        public ActionResult Show(int id)
+        {
+            Profile profile = db.Profiles.Find(id);
+            // Add friend / Unfriend etc.
+            ViewBag.afisareButoane = true;
+            if (profile.UserId == User.Identity.GetUserId() || User.IsInRole("Admin") || (!User.IsInRole("Admin") && !User.IsInRole("User")))
+            {
+                ViewBag.afisareButoane = false;
+            }
+            if (profile.Status == false && profile.UserId != User.Identity.GetUserId() && !User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.username = profile.User.UserName;
+            return View(profile);
+        }
+
         [Authorize(Roles = "User,Admin")]
         public ActionResult New()
         {
