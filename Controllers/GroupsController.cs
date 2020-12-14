@@ -23,26 +23,55 @@ namespace DAW_social_platform.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
 
-            ViewBag.groups = db.Groups.Include("User");
+            var creatorRoleId = (from r in db.GroupRoles
+                            where r.RoleName == "Creator"
+                            select r.RoleId).FirstOrDefault();
+            var adminRoleId = (from r in db.GroupRoles
+                             where r.RoleName == "Admin"
+                             select r.RoleId).FirstOrDefault();
+            var userRoleId = (from r in db.GroupRoles
+                           where r.RoleName == "User"
+                           select r.RoleId).FirstOrDefault();
+            var currentUserId = User.Identity.GetUserId();
+
+            ViewBag.creatorGroups = (from g in db.Groups
+                                     join gu in db.GroupUsers on g.GroupId equals gu.GroupId
+                                     where gu.UserId == currentUserId && gu.RoleId == creatorRoleId
+                                     select g).ToList();
+            ViewBag.adminGroups = (from g in db.Groups
+                                  join gu in db.GroupUsers on g.GroupId equals gu.GroupId
+                                  where gu.UserId == currentUserId && gu.RoleId == adminRoleId
+                                  select g).ToList();
+            ViewBag.userGroups = (from g in db.Groups
+                                 join gu in db.GroupUsers on g.GroupId equals gu.GroupId
+                                  where gu.UserId == currentUserId && gu.RoleId == userRoleId
+                                  select g).ToList();
+            var isAdmin = User.IsInRole("Admin");
+            ViewBag.isAdmin = isAdmin;
+            if (isAdmin)
+            {
+                ViewBag.allGroups = db.Groups.ToList();
+            }
+
             return View();
         }
 
         public ActionResult Show(int id)
         {
             var currentUserId = User.Identity.GetUserId();
-            if (GroupAuth.IsAllowedToEnter(id, currentUserId) || User.IsInRole("Admin"))
+            if (GroupAuth.IsUserOrAdminOrCreator(id, currentUserId) || User.IsInRole("Admin"))
             {
                 Group group = db.Groups.Find(id);
 
                 ViewBag.isGroupAdminCreatorOrAppAdmin = false;
                 ViewBag.showEditButton = false;
-                if (GroupAuth.IsAllowedToEdit(id, currentUserId) || User.IsInRole("Admin"))
+                if (GroupAuth.IsAdminOrCreator(id, currentUserId) || User.IsInRole("Admin"))
                 {
                     ViewBag.showEditButton = true;
                     ViewBag.isGroupAdminCreatorOrAppAdmin = true;
                 }
                 ViewBag.showDeleteButton = false;
-                if (GroupAuth.IsAllowedToDelete(id, currentUserId) || User.IsInRole("Admin"))
+                if (GroupAuth.IsCreator(id, currentUserId) || User.IsInRole("Admin"))
                 {
                     ViewBag.showDeleteButton = true;
                 }
@@ -59,7 +88,7 @@ namespace DAW_social_platform.Controllers
         [HttpPost]
         public ActionResult Show(Message message)
         {
-            if (GroupAuth.IsAllowedToEnter(message.GroupId, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            if (GroupAuth.IsUserOrAdminOrCreator(message.GroupId, User.Identity.GetUserId()) || User.IsInRole("Admin"))
             {
                 message.Date = DateTime.Now;
                 message.UserId = User.Identity.GetUserId();
@@ -129,7 +158,7 @@ namespace DAW_social_platform.Controllers
 
         public ActionResult Edit(int id)
         {
-            if (GroupAuth.IsAllowedToEdit(id, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            if (GroupAuth.IsAdminOrCreator(id, User.Identity.GetUserId()) || User.IsInRole("Admin"))
             {
                 Group group = db.Groups.Find(id);
                 return View(group);
@@ -143,7 +172,7 @@ namespace DAW_social_platform.Controllers
         [HttpPut]
         public ActionResult Edit(int id, Group requestGroup)
         {
-            if (GroupAuth.IsAllowedToEdit(id, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            if (GroupAuth.IsAdminOrCreator(id, User.Identity.GetUserId()) || User.IsInRole("Admin"))
             {
                 try
                 {
@@ -173,7 +202,7 @@ namespace DAW_social_platform.Controllers
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            if (GroupAuth.IsAllowedToDelete(id, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            if (GroupAuth.IsCreator(id, User.Identity.GetUserId()) || User.IsInRole("Admin"))
             {
                 Group group = db.Groups.Find(id);
                 db.Groups.Remove(group);

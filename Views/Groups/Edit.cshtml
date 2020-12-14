@@ -2,26 +2,22 @@
 @{
     ViewBag.Title = "Edit";
 }
+<div class="title col-md-12" style="padding: 0;">
+    <h2>Modifica acest grup</h2>
+</div>
 
-<h2>Editeaza grupul</h2>
-
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Groups"))
-{
+<form class="form col-md-4" action="/Groups/Edit/@Model.GroupId" method="post">
     @Html.HttpMethodOverride(HttpVerbs.Put)
 
     @Html.Label("GroupName", "Numele grupului")
-    <br />
-    @Html.Editor("GroupName")
-
+    @Html.TextBox("GroupName", null, new { @class = "form-control" })
     @Html.ValidationMessage("GroupName", null, new { @class = "text-danger" })
     <br />
-
-    @Html.Label("Description", "Descrierea grupului")
     <br />
+    @Html.Label("Description", "Descrierea grupului")
     @Html.TextBox("Description", null, new { @class = "form-control" })
-
     @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
 
-
-    <button class="btn btn-sm btn-success" type="submit">Modifica grupul</button>
-}
+    <br />
+    <button class="btn btn-sm btn-success" type="submit">Finalizeaza</button>
+</form>

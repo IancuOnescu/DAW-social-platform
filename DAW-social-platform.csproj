@@ -210,7 +210,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="libman.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\groups.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -274,7 +276,7 @@
     <Content Include="Views\Posts\New.cshtml" />
     <Content Include="Views\Posts\Show.cshtml" />
     <Content Include="Views\Comments\Edit.cshtml" />
-    <Content Include="Views\Profiles\Show.cshtml" />
+    <Content Include="Views\Shared\GroupInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

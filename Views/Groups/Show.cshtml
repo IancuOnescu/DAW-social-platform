@@ -3,86 +3,103 @@
     ViewBag.Title = "Show";
 }
 
-<h2>Afisare grup</h2>
-
-<p><b>@Model.GroupName</b></p>
-<br />
-<p>Created by <b>@Model.User.UserName</b></p>
-<br />
-<p>@Model.Description</p>
-<br />
-
-
-<form method="post" action="/Groups/Delete/@Model.GroupId">
-
-    @Html.HttpMethodOverride(HttpVerbs.Delete)
-    @if (ViewBag.showEditButton)
-    {
-        <a class="btn btn-success" href="/Groups/Edit/@Model.GroupId">Editeaza grupul</a>
-    }
-    @if (ViewBag.showDeleteButton)
-    {
-        <button class="btn btn-danger" type="submit">Sterge grupul</button>
-    }
-
-</form>
-
-<br />
-
-@foreach (var message in Model.Messages)
-{
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div>
-                    <p>@message.MessageContent</p>
-                    <small class="pull-right">@message.Date</small>
-                </div>
-
-                <div>
-                    <p>Sent by <b>@message.User.UserName</b></p>
-                </div>
-
-                @if (message.UserId == ViewBag.currentUserId || ViewBag.isGroupAdminCreatorOrAppAdmin)
-                {
-                    <div style="display: inline-block; float : left; margin-right: 15px">
-                        <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
-                    </div>
-
-                    <div style="display: inline-block; float : left">
-                        <form method="post" action="/Messages/Delete/@message.MessageId">
-                            @Html.HttpMethodOverride(HttpVerbs.Delete)
-                            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
-                        </form>
-                    </div>
-                }
-
-            </div>
-        </div>
-        <div class="col-md-2"></div>
+<div class="group-header col-md-12">
+    <div class="group-info">
+        <h2>@Model.GroupName</h2>
+        <p>Created by <b>@Model.User.UserName</b></p>
+        <p>@Model.Description</p>
     </div>
-    <hr />
-    <br />
-}
+
+    <form method="post" class="group-actions" action="/Groups/Delete/@Model.GroupId">
+
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        @if (ViewBag.showEditButton)
+        {
+            <a class="btn btn-success" href="/Groups/Edit/@Model.GroupId">Editeaza grupul</a>
+        }
+        @if (ViewBag.showDeleteButton)
+        {
+            <button class="btn btn-danger" type="submit">Sterge grupul</button>
+        }
+
+    </form>
+
+</div>
 
 <br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
-<div class="container">
+
+
+
+<div id="messages-container" class="messages-container col-md-12">
+
+    @if (Model.Messages.Count == 0)
+    {
+        <div class="col-md-12">
+            <h4>No messages yet.</h4>
+        </div>
+    }
+    else
+    {
+        foreach (var message in Model.Messages.OrderBy(m => m.Date))
+        {
+            <div class="message">
+                <div class="row">
+                    <div class="info col-md-1"></div>
+                    <div class="col-md-10">
+                        <div>
+                            <p>@message.User.UserName</p>
+                        </div>
+                        <div>
+                            <p><b>@message.MessageContent</b></p>
+                            <small class="pull-right">@message.Date</small>
+                        </div>
+
+                        @if (message.UserId == ViewBag.currentUserId || ViewBag.isGroupAdminCreatorOrAppAdmin)
+                        {
+                            <div style="display: inline-block; float : left; margin-right: 15px">
+                                <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
+                            </div>
+
+                            <div style="display: inline-block; float : left">
+                                <form method="post" action="/Messages/Delete/@message.MessageId">
+                                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                    <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                                </form>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        }
+    }
+
+</div>
+
+<div class="send-message-container col-md-12">
     <form method="post" action="/Groups/Show/@Model.GroupId">
-        <div class="panel-body">
+        <div>
             <input type="hidden" name="GroupId" value="@Model.GroupId" />
             <label>Continut mesaj</label>
             <br />
             <textarea class="form-control" name="MessageContent"></textarea>
             @Html.ValidationMessage("MessageContent", "", new { @class = "text-danger" })
             <br />
-            <button class="btn btn-success " type="submit">Trimite mesaj</button>
+            <button class="btn btn-success " type="submit">Trimite</button>
         </div>
     </form>
 </div>
 
-<br />
 
-
-
+@section scripts
+{
+    <script type="text/javascript" src="@Url.Content("/Scripts/Groups.js")"></script>
+}
