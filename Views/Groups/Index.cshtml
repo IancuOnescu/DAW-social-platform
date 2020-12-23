@@ -17,7 +17,7 @@
     </div>
     foreach (DAW_social_platform.Models.Group group in ViewBag.allGroups)
     {
-        @Html.Partial("GroupInfo", group)
+        @Html.Partial("GroupInfoShow", group)
     }
     <br />
 }
@@ -38,7 +38,7 @@ else
     {
         foreach (DAW_social_platform.Models.Group group in ViewBag.creatorGroups)
         {
-            @Html.Partial("GroupInfo", group)
+            @Html.Partial("GroupInfoShow", group)
         }
     }
     <br />
@@ -57,7 +57,7 @@ else
     {
         foreach (DAW_social_platform.Models.Group group in ViewBag.adminGroups)
         {
-            @Html.Partial("GroupInfo", group)
+            @Html.Partial("GroupInfoShow", group)
         }
     }
     <br />
@@ -77,7 +77,7 @@ else
     {
         foreach (DAW_social_platform.Models.Group group in ViewBag.userGroups)
         {
-            @Html.Partial("GroupInfo", group)
+            @Html.Partial("GroupInfoShow", group)
         }
     }
     <br />

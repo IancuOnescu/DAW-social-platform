@@ -10,19 +10,42 @@
         <p>@Model.Description</p>
     </div>
 
-    <form method="post" class="group-actions" action="/Groups/Delete/@Model.GroupId">
+    @if (ViewBag.showEditButton || ViewBag.showDeleteButton)
+    {
+        <form method="post" class="group-actions" action="/Groups/Delete/@Model.GroupId">
 
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
-        @if (ViewBag.showEditButton)
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            @if (ViewBag.showEditButton)
+            {
+                <a class="btn btn-success" href="/Groups/Edit/@Model.GroupId">Editeaza grupul</a>
+            }
+            @if (ViewBag.showDeleteButton)
+            {
+                <button class="btn btn-danger" type="submit">Sterge grupul</button>
+            }
+
+        </form>
+    }
+
+    <div class="group-actions second-actions">
+        @if (ViewBag.isGroupAdminCreatorOrAppAdmin)
         {
-            <a class="btn btn-success" href="/Groups/Edit/@Model.GroupId">Editeaza grupul</a>
-        }
-        @if (ViewBag.showDeleteButton)
-        {
-            <button class="btn btn-danger" type="submit">Sterge grupul</button>
+            <a class="btn btn-success" href="/Groups/JoinRequests/@Model.GroupId">Requests</a>
         }
 
-    </form>
+        <a class="btn btn-primary" href="/Groups/Members/@Model.GroupId">Members</a>
+
+        @if (ViewBag.currentUserId != Model.UserId)
+        {
+            using (Html.BeginForm(actionName: "LeaveGroup", controllerName: "Groups"))
+            {
+                <input type="hidden" name="GroupId" value="@Model.GroupId" />
+                <input type="hidden" name="UserId" value="@ViewBag.currentUserId" />
+
+                <button class="btn btn-danger" type="submit">Leave</button>
+            }
+        }
+    </div>
 
 </div>
 
