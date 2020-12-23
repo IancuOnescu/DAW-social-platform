@@ -1,0 +1,73 @@
+﻿@model DAW_social_platform.Models.Group
+@{
+    ViewBag.Title = "Members";
+}
+
+@if (TempData.ContainsKey("message"))
+{
+    <h1>@ViewBag.message</h1>
+}
+
+<div class="title col-md-12" style="padding: 0;">
+    <h2>Members in <b>@Model.GroupName</b></h2>
+</div>
+<br />
+<br />
+<br />
+<br />
+
+@foreach (var member in Model.Users)
+{
+    <div class="member-wrapper col-md-4">
+        <div class="group-member col-md-12">
+            <p><b>@member.User.UserName</b></p>
+            <p>@member.Role.RoleName</p>
+
+
+            @if (ViewBag.currentUserId != member.UserId && member.UserId != Model.UserId && ViewBag.isGroupAdminCreatorOrAppAdmin)
+            {
+                using (Html.BeginForm("DeleteMember", "Groups", FormMethod.Post, new { @class = "col-md-4" }))
+                {
+                    <input type="hidden" name="GroupId" value="@Model.GroupId" />
+                    <input type="hidden" name="UserId" value="@member.UserId" />
+
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                }
+            }
+
+            @foreach (var profile in ViewBag.profiles)
+            {
+                if (profile.UserId == member.UserId && profile.Status == true)
+                {
+                    <div class="col-md-4">
+                        <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Profile</a>
+                    </div>
+                }
+            }
+
+            @if (member.Role.RoleName == "Admin" && ViewBag.currentUserId == Model.UserId)
+            {
+                using (Html.BeginForm("RevokeAdmin", "Groups", FormMethod.Post, new { @class = "col-md-4" }))
+                {
+                    <input type="hidden" name="GroupId" value="@Model.GroupId" />
+                    <input type="hidden" name="UserId" value="@member.UserId" />
+
+                    <button class="btn btn-danger promote" type="submit">Make user</button>
+                }
+            }
+            else if(member.Role.RoleName == "User" && ViewBag.currentUserId == Model.UserId)
+            {
+                using (Html.BeginForm("MakeAdmin", "Groups", FormMethod.Post, new { @class = "col-md-4" }))
+                {
+                    <input type="hidden" name="GroupId" value="@Model.GroupId" />
+                    <input type="hidden" name="UserId" value="@member.UserId" />
+
+                    <button class="btn btn-primary promote" type="submit">Make admin</button>
+                }
+            }
+
+        </div>
+    </div>
+
+}
+

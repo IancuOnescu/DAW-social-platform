@@ -56,6 +56,213 @@ namespace DAW_social_platform.Controllers
             return View();
         }
 
+        public ActionResult ShowAllGroups()
+        {
+            ViewBag.currentUser = User.Identity.GetUserId();
+            ViewBag.allGroups = db.Groups.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Join(GroupRequests req)
+        {
+            Group group = db.Groups.Find(req.GroupId);
+            var userId = User.Identity.GetUserId();
+            if (group.Requests.Where(r => r.UserId == userId).Count() == 0 && group.Users.Where(u => u.UserId == userId).Count() == 0)
+            {
+                try
+                {
+                    GroupRequests newReq = new GroupRequests();
+                    newReq.GroupId = group.GroupId;
+                    newReq.UserId = User.Identity.GetUserId();
+                    db.GroupRequests.Add(newReq);
+                    db.SaveChanges();
+                }
+                catch
+                {
+                    return RedirectToAction("ShowAllGroups");
+                }
+                return RedirectToAction("ShowAllGroups");
+            }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult JoinRequests(int id)
+        {
+            Group group = db.Groups.Find(id);
+            ViewBag.profiles = db.Profiles.ToList();
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+            return View(group);
+        }
+
+        [HttpPost]
+        public ActionResult AcceptJoinReq(GroupRequests req)
+        {
+            if (GroupAuth.IsAdminOrCreator(req.GroupId, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            {
+                GroupRequests request = db.GroupRequests.Where(r => r.GroupId == req.GroupId && r.UserId == req.UserId).FirstOrDefault();
+                if (request is null)
+                {
+                    return Redirect("/Groups/JoinRequests/" + req.GroupId);
+                }
+                else
+                {
+                    GroupUsers gu = new GroupUsers();
+                    gu.GroupId = request.GroupId;
+                    gu.UserId = request.UserId;
+                    gu.RoleId = (from gr in db.GroupRoles
+                                 where gr.RoleName == "User"
+                                 select gr.RoleId).FirstOrDefault();
+                    db.GroupUsers.Add(gu);
+
+                    db.GroupRequests.Remove(request);
+
+                    db.SaveChanges();
+                    TempData["message"] = "Cererea userului " + db.Users.Find(req.UserId).UserName + " a fost acceptata";
+                    return Redirect("/Groups/JoinRequests/" + request.GroupId);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult RejectJoinReq(GroupRequests req)
+        {
+            if (GroupAuth.IsAdminOrCreator(req.GroupId, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            {
+                GroupRequests request = db.GroupRequests.Where(r => r.GroupId == req.GroupId && r.UserId == req.UserId).FirstOrDefault();
+                if (request is null)
+                {
+                    return Redirect("/Groups/JoinRequests/" + req.GroupId);
+                }
+                else
+                {
+                    db.GroupRequests.Remove(request);
+                    db.SaveChanges();
+                    TempData["message"] = "Cererea userului " + db.Users.Find(req.UserId).UserName + " a fost stearsa";
+                    return Redirect("/Groups/JoinRequests/" + request.GroupId);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        public ActionResult Members(int id)
+        {
+            Group gruop = db.Groups.Find(id);
+            ViewBag.profiles = db.Profiles.ToList();
+
+            ViewBag.isGroupAdminCreatorOrAppAdmin = false;
+            if (GroupAuth.IsAdminOrCreator(id, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            {
+                ViewBag.isGroupAdminCreatorOrAppAdmin = true;
+            }
+            ViewBag.currentUserId = User.Identity.GetUserId();
+
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+            return View(gruop);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteMember(GroupUsers gu)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            if (GroupAuth.IsAdminOrCreator(gu.GroupId, currentUserId) || User.IsInRole("Admin"))
+            {
+                GroupUsers user = db.GroupUsers.Where(g => g.GroupId == gu.GroupId && g.UserId == gu.UserId).FirstOrDefault();
+                if (user is null)
+                {
+                    return Redirect("/Groups/Members/" + gu.GroupId);
+                }
+                else if (currentUserId != user.UserId && user.UserId != user.Group.UserId)
+                {
+                    db.GroupUsers.Remove(user);
+                    db.SaveChanges();
+                    TempData["message"] = "Userul " + db.Users.Find(gu.UserId).UserName + " a fost sters";
+                    return Redirect("/Groups/Members/" + gu.GroupId);
+                }
+                else
+                {
+                    return Redirect("/Groups/Members/" + gu.GroupId);
+                }
+            }
+            else
+            {
+                return Redirect("/Groups/Show/" + gu.GroupId);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult LeaveGroup(GroupUsers gu)
+        {
+            var userId = User.Identity.GetUserId();
+            GroupUsers groupUser = db.GroupUsers.Where(u => u.GroupId == gu.GroupId && u.UserId == userId).FirstOrDefault();
+            if (GroupAuth.IsUserOrAdminOrCreator(groupUser.GroupId, userId) && userId != groupUser.Group.UserId)
+            {
+                if (groupUser is null)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    db.GroupUsers.Remove(groupUser);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                return Redirect("/Groups/Show/" + gu.GroupId);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult RevokeAdmin(GroupUsers gu)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            if (GroupAuth.IsCreator(gu.GroupId, currentUserId))
+            {
+                GroupUsers groupAdmin = db.GroupUsers.Where(u => u.GroupId == gu.GroupId && u.UserId == gu.UserId).FirstOrDefault();
+                if (groupAdmin.Role.RoleName == "Admin")
+                {
+                    groupAdmin.RoleId = (from r in db.GroupRoles
+                                         where r.RoleName == "User"
+                                         select r.RoleId).FirstOrDefault();
+                    db.SaveChanges();
+                }
+            }
+            return Redirect("/Groups/Members/" + gu.GroupId);
+        }
+
+        [HttpPost]
+        public ActionResult MakeAdmin(GroupUsers gu)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            if (GroupAuth.IsCreator(gu.GroupId, currentUserId))
+            {
+                GroupUsers groupAdmin = db.GroupUsers.Where(u => u.GroupId == gu.GroupId && u.UserId == gu.UserId).FirstOrDefault();
+                if (groupAdmin.Role.RoleName == "User")
+                {
+                    groupAdmin.RoleId = (from r in db.GroupRoles
+                                         where r.RoleName == "Admin"
+                                         select r.RoleId).FirstOrDefault();
+                    db.SaveChanges();
+                }
+            }
+            return Redirect("/Groups/Members/" + gu.GroupId);
+        }
+
         public ActionResult Show(int id)
         {
             var currentUserId = User.Identity.GetUserId();

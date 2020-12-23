@@ -118,6 +118,7 @@ textarea {
 /* Group Header*/
 .group-header {
     text-align: center;
+    height: 135px;
     box-shadow: var(--main-shadow);
     border-radius: 10px;
 }
@@ -127,18 +128,22 @@ textarea {
 .group-info{
     float:left;
 }
-.group-actions{
+.group-actions {
+    text-align: center;
     margin: 10px;
     width: 150px;
+    height: calc(100% - 20px);
     float: right;
+    display: table-cell;
+    vertical-align: middle
 }
-.group-actions>*{
-    width: 100%;
-    border-radius:10px;
-    border:0;
-    transition: background-color 0.3s;
-    margin-top: 12px;
-}
+    .group-actions * {
+        width: 100%;
+        border-radius: 10px;
+        border: 0;
+        transition: background-color 0.3s;
+        margin-top: 5px;
+    }
 .group-actions > a{
     background-color: var(--second-color);
 }
@@ -150,6 +155,67 @@ textarea {
 }
 .group-actions > button:hover{
     background-color: var(--danger-color-hover);
+}
+.btn-join {
+    background-color: var(--fourth-color) !important;
+}
+.btn-requested {
+    background-color: pink !important;
+    outline: 0;
+    border: 0;
+}
+.second-actions > a, .second-actions button{
+    width: 60%;
+    margin-top: 5px;
+}
+.second-actions >form{
+    margin:0;
+}
+.second-actions > a:first-child{
+    background-color: var(--fourth-color);
+}
+
+/* Group Requests*/
+.request-wrapper{
+    padding: 0 10px;
+}
+.request {
+    border-radius: 10px;
+    box-shadow: var(--main-shadow);
+    padding: 10px;
+    text-align: center;
+}
+.request>form{
+}
+.request button{
+    width: 80px;
+}
+.request a{
+    width: 80px;
+}
+.req-btn{
+    margin: 2px 0;
+}
+/* Group Members */
+.member-wrapper{
+    padding: 0 10px;
+}
+.group-member {
+    border-radius: 10px;
+    box-shadow: var(--main-shadow);
+    padding: 10px;
+    text-align: center;
+    min-height: 114px;
+}
+.group-member>form{
+    padding:0;
+}
+.group-member a, .group-member button {
+    margin: 2px 0;
+}
+.promote{
+    max-width: 90px;
+    padding: 6px 2px;
 }
 /*Group Messsages*/
 .messages-container {

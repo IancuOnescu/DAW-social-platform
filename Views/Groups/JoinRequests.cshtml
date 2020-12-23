@@ -1,0 +1,53 @@
+﻿@model DAW_social_platform.Models.Group
+@{
+    ViewBag.Title = "JoinRequests";
+}
+
+@if (TempData.ContainsKey("message"))
+{
+    <h1>@ViewBag.message</h1>
+}
+
+<div class="title col-md-12" style="padding: 0;">
+    <h2>Join Requests in <b>@Model.GroupName</b></h2>
+</div>
+<br />
+<br />
+<br />
+<br />
+
+<div class="requests-container">
+    @foreach (DAW_social_platform.Models.GroupRequests req in Model.Requests)
+    {
+    <div class="request-wrapper col-md-4">
+        <div class="request col-md-12">
+            <p><b>@req.User.UserName</b></p>
+
+            @using (Html.BeginForm("AcceptJoinReq", "Groups", FormMethod.Post, new { @class = "col-md-4 req-btn" }))
+            {
+                <input type="hidden" name="GroupId" value="@Model.GroupId" />
+                <input type="hidden" name="UserId" value="@req.UserId" />
+
+                <button class="btn btn-primary" type="submit">Accept</button>
+            }
+            @using (Html.BeginForm("RejectJoinReq", "Groups", FormMethod.Post, new { @class = "col-md-4 req-btn" }))
+            {
+                <input type="hidden" name="GroupId" value="@Model.GroupId" />
+                <input type="hidden" name="UserId" value="@req.UserId" />
+
+                <button class="btn btn-danger" type="submit">Reject</button>
+            }
+            @foreach (var profile in ViewBag.profiles)
+            {
+                if (profile.UserId == req.UserId && profile.Status == true)
+                {
+                <div class="col-md-4 req-btn">
+                    <a class="btn btn-success col-md-4 " href="/Profiles/Show/@profile.ProfileId">Profile</a>
+                </div>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+

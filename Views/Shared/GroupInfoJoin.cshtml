@@ -1,0 +1,13 @@
+﻿<div class="group-main-wrapper col-md-4">
+    <div class="group-wrapper ">
+        <h2>@Model.GroupName</h2>
+        <p>Created by <b>@Model.User.UserName</b></p>
+
+        @using (Html.BeginForm(actionName: "Join", controllerName: "Groups"))
+        {
+            <input type="hidden" name="GroupId" value="@Model.GroupId" />
+
+            <button class="btn btn-primary btn-join" type="submit">Join group</button>
+        }
+    </div>
+</div>
