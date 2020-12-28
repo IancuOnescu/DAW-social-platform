@@ -37,7 +37,7 @@ namespace DAW_social_platform.Models
         public DbSet<Comment> Comments { get; set; }
         public DbSet<GroupRoles> GroupRoles { get; set; }
         public DbSet<GroupUsers> GroupUsers { get; set; }
-
+        public DbSet<UserRelationship> UserRelationships { get; set; }
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

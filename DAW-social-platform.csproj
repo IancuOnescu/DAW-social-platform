@@ -192,6 +192,7 @@
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Profile.cs" />
+    <Compile Include="Models\UserRelationship.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -277,6 +278,7 @@
     <Content Include="Views\Posts\Show.cshtml" />
     <Content Include="Views\Comments\Edit.cshtml" />
     <Content Include="Views\Shared\GroupInfo.cshtml" />
+    <Content Include="Views\Profiles\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -296,7 +298,9 @@
       <DependentUpon>202012061520249_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\UserRelationship\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

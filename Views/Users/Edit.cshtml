@@ -1,5 +1,5 @@
 ﻿@model DAW_social_platform.Models.ApplicationUser
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Users", routeValues: new { id = @Model.UserId }))
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Users", routeValues: new { id = @Model.Id }))
 {
     @Html.HttpMethodOverride(HttpVerbs.Put)
     <br />

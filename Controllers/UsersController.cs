@@ -16,11 +16,30 @@ namespace DAW_social_platform.Controllers
         [Authorize(Roles = "User, Admin")]
         public ActionResult Index()
         {
-            var users = from user in db.Users
-                        orderby user.UserName
-                        select user;
+            ViewBag.isAdmin = false;
+            if (User.IsInRole("Admin"))
+            {
+                var users = from user in db.Users
+                            orderby user.UserName
+                            select user;
+                ViewBag.UsersList = users;
+                ViewBag.isAdmin = true;
+            }
+            else
+            {
+                var userId = User.Identity.GetUserId();
+                var users1 = from rel in db.UserRelationships
+                             join usr in db.Users on rel.ToUserId equals usr.Id
+                             where rel.FromUserId == userId && rel.RelationshipType == "accepted"
+                             select usr;
+                var users2 = from rel in db.UserRelationships
+                             join usr in db.Users on rel.FromUserId equals usr.Id
+                             where rel.ToUserId == userId && rel.RelationshipType == "accepted"
+                             select usr;
+                users1 = users1.Union(users2);
+                ViewBag.UsersList = users1;
+            }
             var profiles = db.Profiles.ToList();
-            ViewBag.UsersList = users;
             ViewBag.Profiles = profiles;
             return View();
         }
