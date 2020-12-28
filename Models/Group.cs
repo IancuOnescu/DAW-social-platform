@@ -17,7 +17,8 @@ namespace DAW_social_platform.Models
 
         public virtual ApplicationUser User { get; set; } 
 
-        public virtual ICollection<Message> Messages { get; set; } 
-        public virtual ICollection<GroupUsers> Users { get; set; } 
+        public virtual ICollection<Message> Messages { get; set; }  
+        public virtual ICollection<GroupUsers> Users { get; set; }
+        public virtual ICollection<GroupRequests> Requests { get; set; }
     }
 }
