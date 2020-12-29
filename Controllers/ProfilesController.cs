@@ -42,6 +42,7 @@ namespace DAW_social_platform.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.username = profile.User.UserName;
+            ViewBag.isAdmin = User.IsInRole("Admin");
             return View(profile);
         }
 

@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Show";
 }
 
@@ -22,3 +21,13 @@
 
 <br />
 <br />
+
+@if (ViewBag.isAdmin){
+    <form method="post" action="/Profiles/Delete/@Model.ProfileId">
+
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+        <button class="btn btn-danger" type="submit">Sterge profilul</button>
+
+    </form>
+}
