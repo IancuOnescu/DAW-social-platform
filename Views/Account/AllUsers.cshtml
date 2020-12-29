@@ -3,13 +3,43 @@
     ViewBag.Title = "AllUsers";
 }
 
-<h2>AllUsers</h2>
+<h2>Admins</h2>
 
-@foreach (var user in Model)
+@foreach (var admin in ViewBag.admins)
+{
+    <p>@admin.UserName</p>
+    <p>@admin.Email</p>
+
+    foreach (var profile in ViewBag.Profiles)
+    {
+        if (profile.UserId == admin.Id && profile.Status == true || profile.UserId == admin.Id && ViewBag.isAdmin)
+        {
+            <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
+        }
+    }
+    <br />
+}
+<h2>Users</h2>
+@foreach (var user in ViewBag.users)
 {
     <p>@user.UserName</p>
     <p>@user.Email</p>
+
+    foreach (var profile in ViewBag.Profiles)
+    {
+        if (profile.UserId == user.Id && profile.Status == true || profile.UserId == user.Id && ViewBag.isAdmin)
+        {
+            <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
+        }
+    }
+    if (ViewBag.isAdmin)
+    {
+        <form method="post" action="/Users/Delete/@user.Id">
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+            <button class="btn btn-danger" type="submit">Delete</button>
+        </form>
+    }
+    <br />
+
 }
-<br />
-<br />
-<br />

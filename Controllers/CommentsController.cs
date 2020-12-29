@@ -1,4 +1,5 @@
-﻿using DAW_social_platform.Models;
+﻿using DAW_social_platform.Infrastructure;
+using DAW_social_platform.Models;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace DAW_social_platform.Controllers
     public class CommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private EmailConfig Email = new EmailConfig();
+
         // GET: Comments
         [Authorize(Roles = "User,Visitor,Admin")]
         public ActionResult Index()
@@ -24,6 +27,21 @@ namespace DAW_social_platform.Controllers
             Comment comment = db.Comments.Find(id);
             if (comment.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
+                if (User.IsInRole("Admin") && comment.UserId != User.Identity.GetUserId())
+                {
+                    string author = comment.User.Email;
+
+                    string notifBody = "<p>Unul dintre comentariile dumneavostra a fost sters de catre administrator. </p><br/>";
+                    notifBody += "<p>Postarea: </p>";
+                    notifBody += "<p><b>" + comment.Post.Content + "</b></p><br />";
+                    notifBody += "<p>Comentariul sters: </p>";
+                    notifBody += "<p><b>" + comment.Content + "</b></p><br/><br/>";
+                    notifBody += "<p>Va rugam sa fiti atent la continutul pe care il postati pe aceasta platforma.</p>";
+                    notifBody += "<br/> <p>Echipa <b>DAW-social-app</b></p>";
+
+                    Email.SendEmailNotification(author, "Comentariu sters!", notifBody);
+                }
+
                 db.Comments.Remove(comment);
                 db.SaveChanges();
             }

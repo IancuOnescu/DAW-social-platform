@@ -1,4 +1,5 @@
-﻿using DAW_social_platform.Models;
+﻿using DAW_social_platform.Infrastructure;
+using DAW_social_platform.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -11,9 +12,10 @@ namespace DAW_social_platform.Controllers
 {
     public class UsersController : Controller
     {
-        // GET: Users
+        private EmailConfig Email = new EmailConfig();
         private ApplicationDbContext db = ApplicationDbContext.Create();
         [Authorize(Roles = "User, Admin")]
+
         public ActionResult Index()
         {
             var users = from user in db.Users
@@ -113,20 +115,24 @@ namespace DAW_social_platform.Controllers
             ApplicationDbContext context = new ApplicationDbContext();
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             var user = UserManager.Users.FirstOrDefault(u => u.Id == id);
-            /*var articles = db.Articles.Where(a => a.UserId == id);
-            foreach (var article in articles)
+
+            var profile = db.Profiles.FirstOrDefault(p => p.UserId == user.Id);
+
+            if (!(profile is null))
             {
-                db.Articles.Remove(article);
+                db.Profiles.Remove(profile);
+                db.SaveChanges();
             }
-            var comments = db.Comments.Where(comm => comm.UserId == id);
-            foreach (var comment in comments)
-            {
-                db.Comments.Remove(comment);
-            }
-            */
-            db.SaveChanges();
+
+            string author = user.Email;
+            string notifBody = "<p>Ne pare rau, </p>";
+            notifBody += "<p>Contul Dvs. de utilizator a fost sters de catre un administrator :(</p>";
+            notifBody += "<br/> <p>Echipa <b>DAW-social-app</b>.</p>";
+            Email.SendEmailNotification(author, "Contul Dvs. a fost sters!", notifBody);
+
             UserManager.Delete(user);
-            return RedirectToAction("Index");
+            db.SaveChanges();
+            return Redirect("/Account/AllUsers");
         }
     }
 }
