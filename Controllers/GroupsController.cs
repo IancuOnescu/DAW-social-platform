@@ -14,6 +14,7 @@ namespace DAW_social_platform.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private GroupAuthorization GroupAuth = new GroupAuthorization();
+        private EmailConfig Email = new EmailConfig();
 
         // GET: Groups
         public ActionResult Index()
@@ -101,7 +102,7 @@ namespace DAW_social_platform.Controllers
         [HttpPost]
         public ActionResult AcceptJoinReq(GroupRequests req)
         {
-            if (GroupAuth.IsAdminOrCreator(req.GroupId, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            if (GroupAuth.IsAdminOrCreator(req.GroupId, User.Identity.GetUserId()))
             {
                 GroupRequests request = db.GroupRequests.Where(r => r.GroupId == req.GroupId && r.UserId == req.UserId).FirstOrDefault();
                 if (request is null)
@@ -110,6 +111,12 @@ namespace DAW_social_platform.Controllers
                 }
                 else
                 {
+                    string author = request.User.Email;
+                    string notifBody = "<p>Bine ai venit in grupul <b>" + request.Group.GroupName + "</b>. </p><br/>";
+                    notifBody += "<p>Cererea dumneavoastra pentru a face aparte din grupul <b>" + request.Group.GroupName + "</b> a fost acceptata</p>";
+                    notifBody += "<br/> <p>Echipa <b>DAW-social-app.</b></p>";
+                    Email.SendEmailNotification(author, "Cerere acceptata!", notifBody);
+
                     GroupUsers gu = new GroupUsers();
                     gu.GroupId = request.GroupId;
                     gu.UserId = request.UserId;
@@ -134,7 +141,7 @@ namespace DAW_social_platform.Controllers
         [HttpPost]
         public ActionResult RejectJoinReq(GroupRequests req)
         {
-            if (GroupAuth.IsAdminOrCreator(req.GroupId, User.Identity.GetUserId()) || User.IsInRole("Admin"))
+            if (GroupAuth.IsAdminOrCreator(req.GroupId, User.Identity.GetUserId()))
             {
                 GroupRequests request = db.GroupRequests.Where(r => r.GroupId == req.GroupId && r.UserId == req.UserId).FirstOrDefault();
                 if (request is null)
@@ -143,6 +150,12 @@ namespace DAW_social_platform.Controllers
                 }
                 else
                 {
+                    string author = request.User.Email;
+                    string notifBody = "<p>Ne pare rau, </p>";
+                    notifBody += "<p>Cererea dumneavoastra pentru a face aparte din grupul <b>" + request.Group.GroupName + "</b> a fost respinsa :(</p>";
+                    notifBody += "<br/> <p>Echipa <b>DAW-social-app.</b></p>";
+                    Email.SendEmailNotification(author, "Cerere respinsa!", notifBody);
+
                     db.GroupRequests.Remove(request);
                     db.SaveChanges();
                     TempData["message"] = "Cererea userului " + db.Users.Find(req.UserId).UserName + " a fost stearsa";
@@ -178,7 +191,7 @@ namespace DAW_social_platform.Controllers
         public ActionResult DeleteMember(GroupUsers gu)
         {
             var currentUserId = User.Identity.GetUserId();
-            if (GroupAuth.IsAdminOrCreator(gu.GroupId, currentUserId) || User.IsInRole("Admin"))
+            if (GroupAuth.IsAdminOrCreator(gu.GroupId, currentUserId))
             {
                 GroupUsers user = db.GroupUsers.Where(g => g.GroupId == gu.GroupId && g.UserId == gu.UserId).FirstOrDefault();
                 if (user is null)
@@ -187,6 +200,12 @@ namespace DAW_social_platform.Controllers
                 }
                 else if (currentUserId != user.UserId && user.UserId != user.Group.UserId)
                 {
+                    string author = user.User.Email;
+                    string notifBody = "<p>Ne pare rau, </p>";
+                    notifBody += "<p>Un administrator al grupului <b>" + user.Group.GroupName + "</b> v-a eliminat din grup :(</p>";
+                    notifBody += "<br/> <p>Echipa <b>DAW-social-app</b>.</p>";
+                    Email.SendEmailNotification(author, "Ati fost eliminat!", notifBody);
+
                     db.GroupUsers.Remove(user);
                     db.SaveChanges();
                     TempData["message"] = "Userul " + db.Users.Find(gu.UserId).UserName + " a fost sters";
@@ -236,6 +255,12 @@ namespace DAW_social_platform.Controllers
                 GroupUsers groupAdmin = db.GroupUsers.Where(u => u.GroupId == gu.GroupId && u.UserId == gu.UserId).FirstOrDefault();
                 if (groupAdmin.Role.RoleName == "Admin")
                 {
+                    string author = groupAdmin.User.Email;
+                    string notifBody = "<p>Ne pare rau, </p>";
+                    notifBody += "<p>Creatorul grupului <b>" + groupAdmin.Group.GroupName + "</b> v-a revocat dreptul de a fi admin :(</p>";
+                    notifBody += "<br/> <p>Echipa <b>DAW-social-app</b>.</p>";
+                    Email.SendEmailNotification(author, "Nu mai sunteti admin!", notifBody);
+
                     groupAdmin.RoleId = (from r in db.GroupRoles
                                          where r.RoleName == "User"
                                          select r.RoleId).FirstOrDefault();
@@ -254,6 +279,12 @@ namespace DAW_social_platform.Controllers
                 GroupUsers groupAdmin = db.GroupUsers.Where(u => u.GroupId == gu.GroupId && u.UserId == gu.UserId).FirstOrDefault();
                 if (groupAdmin.Role.RoleName == "User")
                 {
+                    string author = groupAdmin.User.Email;
+                    string notifBody = "<p>Felicitari, </p>";
+                    notifBody += "<p>Creatorul grupului <b>" + groupAdmin.Group.GroupName + "</b> v-a oferit dreptul de a fi admin :O</p>";
+                    notifBody += "<br/> <p>Echipa <b>DAW-social-app</b>.</p>";
+                    Email.SendEmailNotification(author, "Acum sunteti admin!", notifBody);
+
                     groupAdmin.RoleId = (from r in db.GroupRoles
                                          where r.RoleName == "Admin"
                                          select r.RoleId).FirstOrDefault();
@@ -412,6 +443,16 @@ namespace DAW_social_platform.Controllers
             if (GroupAuth.IsCreator(id, User.Identity.GetUserId()) || User.IsInRole("Admin"))
             {
                 Group group = db.Groups.Find(id);
+
+                if (User.IsInRole("Admin"))
+                {
+                    string author = group.User.Email;
+                    string notifBody = "<p>Ne pare rau, </p>";
+                    notifBody += "<p>Grupul <b>" + group.GroupName + "</b> a fost sters de catre administrator :(</p>";
+                    notifBody += "<br/> <p>Echipa <b>DAW-social-app</b>.</p>";
+                    Email.SendEmailNotification(author, "Grupul Dvs. a fost sters!", notifBody);
+                }
+
                 db.Groups.Remove(group);
                 TempData["message"] = "Grupul a fost sters!";
                 db.SaveChanges();

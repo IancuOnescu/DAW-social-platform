@@ -17,6 +17,7 @@ namespace DAW_social_platform.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -425,8 +426,20 @@ namespace DAW_social_platform.Controllers
         // GET: All users
         public ActionResult AllUsers()
         {
-            var users = UserManager.Users;
-            return View(users);
+            var userRoleId = db.Roles.Where(r => r.Name == "User").FirstOrDefault().Id;
+            var adminRoleId = db.Roles.Where(r => r.Name == "Admin").FirstOrDefault().Id;
+
+
+            ViewBag.Profiles = db.Profiles.ToList();
+            ViewBag.isAdmin = User.IsInRole("Admin");
+            ViewBag.users = (from user in UserManager.Users
+                            where user.Roles.Any(r => r.RoleId == userRoleId)
+                            select user).ToList();
+            ViewBag.admins = (from user in UserManager.Users
+                             where user.Roles.Any(r => r.RoleId == adminRoleId)
+                             select user).ToList();
+
+            return View();
         }
 
         protected override void Dispose(bool disposing)

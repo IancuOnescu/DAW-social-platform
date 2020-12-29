@@ -1,4 +1,5 @@
-﻿using DAW_social_platform.Models;
+﻿using DAW_social_platform.Infrastructure;
+using DAW_social_platform.Models;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace DAW_social_platform.Controllers
     public class PostsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private EmailConfig Email = new EmailConfig();
+
         // GET: Posts
         [Authorize(Roles = "User,Admin")]
         public ActionResult Index()
@@ -170,6 +173,16 @@ namespace DAW_social_platform.Controllers
             Post post = db.Posts.Find(id);
             if (post.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
+                if (User.IsInRole("Admin"))
+                {
+                    string author = post.User.Email;
+                    string notifBody = "<p>Ne pare rau, </p>";
+                    notifBody += "<p>Postarea <b>" + post.Content + "</b> a fost stearsa de catre administrator. </p><br/>";
+                    notifBody += "<p>Va rugam sa fiti atent la continutul pe care il postati pe aceasta platforma.</p> <br/>";
+                    notifBody += "<p>Echipa <b>DAW-social-app</b>.</p>";
+                    Email.SendEmailNotification(author, "Postarea Dvs. a fost stearsa!", notifBody);
+                }
+
                 db.Posts.Remove(post);
                 TempData["message"] = "Postarea a fost stearsa!";
                 db.SaveChanges();

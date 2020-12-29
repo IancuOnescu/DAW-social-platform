@@ -1,4 +1,5 @@
-﻿using DAW_social_platform.Models;
+﻿using DAW_social_platform.Infrastructure;
+using DAW_social_platform.Models;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace DAW_social_platform.Controllers
     public class ProfilesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private EmailConfig Email = new EmailConfig();
 
         // GET: Profiles
         [Authorize(Roles = "User, Admin")]
@@ -146,6 +148,16 @@ namespace DAW_social_platform.Controllers
             Profile profile = db.Profiles.Find(id);
             if (profile.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
             {
+                if (User.IsInRole("Admin"))
+                {
+                    string author = profile.User.Email;
+                    string notifBody = "<p>Ne pare rau, </p>";
+                    notifBody += "<p>Profilul Dvs. de utilizator a fost sters de catre administrator. </p><br/>";
+                    notifBody += "<p>Va rugam sa fiti atent la continutul pe care il postati pe aceasta platforma.</p> <br/>";
+                    notifBody += "<p>Echipa <b>DAW-social-app</b>.</p>";
+                    Email.SendEmailNotification(author, "Profilul Dvs. a fost sters!", notifBody);
+                }
+
                 db.Profiles.Remove(profile);
                 TempData["message"] = "Profilul a fost sters!";
                 db.SaveChanges();
