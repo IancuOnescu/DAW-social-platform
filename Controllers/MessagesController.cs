@@ -14,6 +14,7 @@ namespace DAW_social_platform.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private GroupAuthorization GroupAuth = new GroupAuthorization();
+        private EmailConfig Email = new EmailConfig();
  
 
         [HttpDelete]
@@ -22,6 +23,18 @@ namespace DAW_social_platform.Controllers
             Message mes = db.Messages.Find(id);
             if (GroupAuth.IsAdminOrCreator(mes.GroupId, User.Identity.GetUserId()) || User.Identity.GetUserId() == mes.UserId || User.IsInRole("Admin"))
             {
+                if (User.Identity.GetUserId() != mes.UserId)
+                {
+                    string author = mes.User.Email;
+                    string notifBody = "<p>Ne pare rau, </p>";
+                    notifBody += "<p>Unul dintre mesajele dumneavostra in grupul <b>" + mes.Group.GroupName + "</b> a fost sters de catre administrator. </p><br/>";
+                    notifBody += "<p>Mesajul sters: </p>";
+                    notifBody += "<p><b>" + mes.MessageContent + "</b></p><br/>";
+                    notifBody += "<p>Va rugam sa fiti atent la continutul pe care il postati pe aceasta platforma.</p> <br/>";
+                    notifBody += "<p>Echipa <b>DAW-social-app</b>.</p>";
+                    Email.SendEmailNotification(author, "Mesajul Dvs. a fost sters!", notifBody);
+                }
+
                 db.Messages.Remove(mes);
                 db.SaveChanges();
             }
