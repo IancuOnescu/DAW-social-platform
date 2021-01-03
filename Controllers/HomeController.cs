@@ -1,4 +1,5 @@
 ﻿using DAW_social_platform.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +33,12 @@ namespace DAW_social_platform.Controllers
         
         public ActionResult SearchInfo()
         {
-            var users = db.Users.OrderBy(a => a.UserName);
-            var groups = db.Groups.OrderBy(a => a.GroupName);
+            var usr = User.Identity.GetUserId();
+            var users = db.Users.OrderBy(a => a.UserName).ToList();
+            var profiles = db.Profiles.ToList();
+            var groups = db.Groups.OrderBy(a => a.GroupName).ToList();
             var search = "";
-            
+
             if(Request.Params.Get("search") != null)
             {
                 search = Request.Params.Get("search").Trim();
@@ -47,11 +50,14 @@ namespace DAW_social_platform.Controllers
                     || gn.Description.Contains(search)
                     ).Select(a => a.GroupId).ToList();
 
-                users = db.Users.Where(usr => userIds.Contains(usr.Id)).OrderBy(a => a.UserName);
-                groups = db.Groups.Where(grp => groupIds.Contains(grp.GroupId)).OrderBy(a => a.GroupName);
+                users = db.Users.Where(usrs => userIds.Contains(usrs.Id)).OrderBy(a => a.UserName).ToList();
+                groups = db.Groups.Where(grp => groupIds.Contains(grp.GroupId)).OrderBy(a => a.GroupName).ToList();
             }
             
             var totalItems = users.Count() + groups.Count();
+            var maxItems = users.Count();
+            if (groups.Count() > maxItems)
+                maxItems = groups.Count();
             var currentPage = Convert.ToInt32(Request.Params.Get("page"));
             var offset = 0;
             var pageSize = 2;
@@ -69,10 +75,17 @@ namespace DAW_social_platform.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
 
+            List<string> notAddable1 = db.UserRelationships.Where(a => a.ToUserId == usr).Select(a => a.FromUserId).ToList();
+            List<string> notAddable2 = db.UserRelationships.Where(a => a.FromUserId == usr).Select(a => a.ToUserId).ToList();
+            var addable = db.Users.Where(a => !notAddable1.Contains(a.Id) && !notAddable2.Contains(a.Id) && a.Id != usr).ToList();
+
             ViewBag.total = totalItems;
-            ViewBag.lastpage = Math.Ceiling((float)totalItems / (float)pageSize);
+            ViewBag.lastpage = Math.Ceiling((float)maxItems / (float)pageSize);
             ViewBag.Users = paginatedUsers;
             ViewBag.Groups = paginatedGroups;
+            ViewBag.Profiles = profiles;
+            ViewBag.Addable = addable;
+            ViewBag.usr = usr;
             ViewBag.SearchString = search;
             
             return View();

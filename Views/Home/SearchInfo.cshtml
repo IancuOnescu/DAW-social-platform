@@ -51,11 +51,43 @@
 {
     <p>@user.UserName</p>
     <p>@user.Email</p>
+    foreach (var profile in ViewBag.Profiles)
+    {
+        if (profile.UserId == user.Id && profile.Status == true)
+        {
+            <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
+        }
+    }
+    if (ViewBag.usr != null)
+    {
+        foreach (var us in ViewBag.Addable)
+        {
+            if (us.Id == user.Id)
+            {
+                using (Html.BeginForm(actionName: "Add", controllerName: "Users"))
+                {
+                <input type="hidden" name="reqId" value="@user.Id" />
+                <button class="btn btn-primary btn-join" type="submit">Add+</button>
+                }
+            }
+        }
+    }
 }
 <br />
 <br />
 <p>Groups</p>
 @foreach (DAW_social_platform.Models.Group group in ViewBag.Groups)
 {
-   <p>@group.GroupName</p>
+    if (group.Users.Where(u => u.UserId == ViewBag.usr).Count() == 1)
+    {
+        @Html.Partial("GroupInfoShow", group)
+    }
+    else if (group.Requests.Where(u => u.UserId == ViewBag.usr).Count() == 1)
+    {
+        @Html.Partial("GroupInfoReq", group)
+    }
+    else if(ViewBag.usr != null)
+    {
+        @Html.Partial("GroupInfoJoin", group)
+    }
 }
