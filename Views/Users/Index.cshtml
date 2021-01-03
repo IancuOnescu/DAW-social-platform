@@ -16,15 +16,17 @@
      }
      @foreach ( var profile in ViewBag.Profiles)
      {
-         if(profile.UserId == user.Id && profile.Status == true)
+         if(profile.UserId == user.Id && (profile.Status == true || ViewBag.isAdmin))
          {
             <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
          }
      }
-     </div>@* -- if is admin display this
-     <div class="panel-footer">
-     <a class="btn btn-sm btn-success" href="/Users/Edit/@user.Id"> Editare utilizator</a>
-     <a class="btn btn-sm btn-success" href="/Users/Show/@user.Id"> Vizualizare utilizator</a>
-     </div>*@
+     </div>
+     if (ViewBag.isAdmin)
+     {
+         <div class="panel-footer">
+         <a class="btn btn-sm btn-success" href="/Users/Edit/@user.Id">Editare utilizator</a>
+         </div>
+     }
      <br /><br />
 }

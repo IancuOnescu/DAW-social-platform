@@ -1,0 +1,18 @@
+﻿<h1>Cereri de prietenie</h1>
+
+@foreach (var req in ViewBag.requesters)
+{
+    <p>@req.UserName</p>
+    foreach (var profile in ViewBag.Profiles)
+    {
+        if (profile.UserId == req.Id && profile.Status == true || profile.UserId == req.Id)
+        {
+            <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
+        }
+    }
+    using (Html.BeginForm(actionName: "AcceptFriendRequests", controllerName: "Users"))
+    {
+        <input type="hidden" name="fromId" value="@req.Id" />
+        <button class="btn btn-primary btn-join" type="submit">Accept</button>
+    }
+}
