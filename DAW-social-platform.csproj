@@ -280,7 +280,6 @@
     <Content Include="Views\Posts\Show.cshtml" />
     <Content Include="Views\Comments\Edit.cshtml" />
     <Content Include="Views\Shared\GroupInfoShow.cshtml" />
-    <Content Include="Views\Groups\ShowAllGroups.cshtml" />
     <Content Include="Views\Shared\GroupInfoJoin.cshtml" />
     <Content Include="Views\Shared\GroupInfoReq.cshtml" />
     <Content Include="Views\Groups\JoinRequests.cshtml" />

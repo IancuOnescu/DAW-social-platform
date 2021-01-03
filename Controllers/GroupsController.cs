@@ -57,13 +57,6 @@ namespace DAW_social_platform.Controllers
             return View();
         }
 
-        public ActionResult ShowAllGroups()
-        {
-            ViewBag.currentUser = User.Identity.GetUserId();
-            ViewBag.allGroups = db.Groups.ToList();
-            return View();
-        }
-
         [HttpPost]
         public ActionResult Join(GroupRequests req)
         {
@@ -81,22 +74,33 @@ namespace DAW_social_platform.Controllers
                 }
                 catch
                 {
-                    return RedirectToAction("ShowAllGroups");
+                    return RedirectToAction("Index");
+
                 }
-                return RedirectToAction("ShowAllGroups");
+                return RedirectToAction("Index");
+
             }
             return RedirectToAction("Index");
         }
 
         public ActionResult JoinRequests(int id)
         {
-            Group group = db.Groups.Find(id);
-            ViewBag.profiles = db.Profiles.ToList();
-            if (TempData.ContainsKey("message"))
+            var isAdminOrCreator = GroupAuth.IsAdminOrCreator(id, User.Identity.GetUserId());
+            if (isAdminOrCreator || User.IsInRole("Admin"))
             {
-                ViewBag.message = TempData["message"].ToString();
+                Group group = db.Groups.Find(id);
+                ViewBag.profiles = db.Profiles.ToList();
+                ViewBag.isAdminOrCreator = isAdminOrCreator;
+                if (TempData.ContainsKey("message"))
+                {
+                    ViewBag.message = TempData["message"].ToString();
+                }
+                return View(group);
+            } else
+            {
+                return RedirectToAction("Index");
             }
-            return View(group);
+
         }
 
         [HttpPost]

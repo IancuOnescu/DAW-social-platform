@@ -23,8 +23,26 @@ namespace DAW_social_platform.Controllers
                 ViewBag.message = TempData["message"].ToString();
             }
 
-            var posts = db.Posts.Include("User");
-            ViewBag.posts = posts;
+            if (User.IsInRole("Admin"))
+            {
+                ViewBag.posts = db.Posts.OrderByDescending(p => p.Date).ToList();
+            } else
+            {
+                var userId = User.Identity.GetUserId();
+                var users1 = from rel in db.UserRelationships
+                             join usr in db.Users on rel.ToUserId equals usr.Id
+                             where rel.FromUserId == userId && rel.RelationshipType == "accepted"
+                             select usr.Id;
+                var users2 = from rel in db.UserRelationships
+                             join usr in db.Users on rel.FromUserId equals usr.Id
+                             where rel.ToUserId == userId && rel.RelationshipType == "accepted"
+                             select usr.Id;
+                users1 = users1.Union(users2);
+
+                var posts = db.Posts.Where(p => users1.Contains(p.UserId) || p.UserId == userId).OrderByDescending(p => p.Date).ToList();
+                ViewBag.posts = posts;
+            }
+            
             return View();
         }
 
@@ -147,7 +165,7 @@ namespace DAW_social_platform.Controllers
                             db.SaveChanges();
                             TempData["message"] = "Postarea a fost modificata!";
                         }
-                        return RedirectToAction("Index");
+                        return Redirect("/Posts/Show/" + post.PostId);
                     }
                     else
                     {

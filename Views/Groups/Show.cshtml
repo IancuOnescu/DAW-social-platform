@@ -35,7 +35,7 @@
 
         <a class="btn btn-primary" href="/Groups/Members/@Model.GroupId">Members</a>
 
-        @if (ViewBag.currentUserId != Model.UserId)
+        @if (ViewBag.currentUserId != Model.UserId && !User.IsInRole("Admin"))
         {
             using (Html.BeginForm(actionName: "LeaveGroup", controllerName: "Groups"))
             {
@@ -77,20 +77,21 @@
                     <div class="info col-md-1"></div>
                     <div class="col-md-10">
                         <div>
-                            <p>@message.User.UserName</p>
-                        </div>
-                        <div>
-                            <p><b>@message.MessageContent</b></p>
-                            <small class="pull-right">@message.Date</small>
+                            <div class="user">
+                                <div class="user-badge">@message.User.UserName.ToString().ToUpper()[0]</div>
+                                <div class="username"><b>&nbsp; @message.User.UserName</b></div>
+                                <div class="label label-default" style="float:right; margin-top: 7px;">@message.Date</div>
+                            </div>
+                            <p style="margin-left: 30px;">@message.MessageContent</p>
                         </div>
 
                         @if (message.UserId == ViewBag.currentUserId || ViewBag.isGroupAdminCreatorOrAppAdmin)
                         {
-                            <div style="display: inline-block; float : left; margin-right: 15px">
+                            <div style="display: inline-block; float : right; margin-right: 15px">
                                 <a class="glyphicon glyphicon-pencil" href="/Messages/Edit/@message.MessageId"></a>
                             </div>
 
-                            <div style="display: inline-block; float : left">
+                            <div style="display: inline-block; float : right; margin-right: 15px">
                                 <form method="post" action="/Messages/Delete/@message.MessageId">
                                     @Html.HttpMethodOverride(HttpVerbs.Delete)
                                     <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>

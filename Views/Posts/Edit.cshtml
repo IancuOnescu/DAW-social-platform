@@ -3,21 +3,19 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Editeaza grupul</h2>
+<div class="title title-center col-md-12">
+    <h2>Editeaza postarea</h2>
+</div>
 
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Posts"))
+@using (Html.BeginForm("Edit", "Posts", FormMethod.Post, new { @class = "form col-md-4" }))
 {
     @Html.HttpMethodOverride(HttpVerbs.Put)
 
-    <h1>Numele userului</h1>
+    @Html.Label("Content", "Continutul Postarii")
     <br />
+    @Html.TextBox("Content", null, new { @class = "form-control" })
     <br />
-
-    @Html.Label("conent", "Continutul Postarii")
-    <br />
-    @Html.TextBox("content", null, new { @class = "form-control" })
-
-    @Html.ValidationMessage("conent", null, new { @class = "text-danger" })
+    @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
 
 
     <button class="btn btn-sm btn-success" type="submit">Modifica postarea</button>
