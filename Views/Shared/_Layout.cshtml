@@ -24,14 +24,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Search placeholder", "Index", "Home")</li>
+                    <li>@Html.Partial("_SearchPartial")</li>
+                    @*@<li>@Html.ActionLink("Search placeholder", "Index", "Home")</li>*@
                     @if (User.IsInRole("User"))
                     {
                         <li>@Html.ActionLink("Feed", "Index", "Posts")</li>
                         <li>@Html.ActionLink("Prieteni", "Index", "Users")</li>
                         <li>@Html.ActionLink("Grupuri", "Index", "Groups")</li>
-                        <li>@Html.ActionLink("Requests placeholder", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Toate Grupurile", "ShowAllGroups", "Groups")</li>
+                        <li>@Html.ActionLink("Requests", "Index", "Home")</li>
                     }
                     else if (User.IsInRole("Admin"))
                     {

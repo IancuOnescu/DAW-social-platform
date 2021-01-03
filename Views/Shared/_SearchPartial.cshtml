@@ -1,0 +1,16 @@
+﻿@*<form class="form-inline mr-auto align-middle">
+    <div class="input-group">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" value="@ViewBag.SearchString" name="search">
+        <span class="input-group-addon">
+            <i class="glyphicon glyphicon-search form-control-feedback"></i>
+        </span>
+    </div>
+</form>*@
+@using (Html.BeginForm("SearchInfo", "Home",
+   FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search" }))
+{
+    <div class="form-group">
+        <input type="text" id="teste" data-provide="typehead" class="form-control" placeholder="Search" value="@ViewBag.SearchString" name="search">
+        <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+    </div>
+}

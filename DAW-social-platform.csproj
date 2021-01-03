@@ -284,6 +284,8 @@
     <Content Include="Views\Shared\GroupInfoReq.cshtml" />
     <Content Include="Views\Groups\JoinRequests.cshtml" />
     <Content Include="Views\Groups\Members.cshtml" />
+    <Content Include="Views\Shared\_SearchPartial.cshtml" />
+    <Content Include="Views\Home\SearchInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
