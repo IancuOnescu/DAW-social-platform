@@ -41,8 +41,10 @@ namespace DAW_social_platform.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            ViewBag.currentUser = User.Identity.GetUserId();
             ViewBag.username = profile.User.UserName;
             ViewBag.isAdmin = User.IsInRole("Admin");
+            ViewBag.posts = db.Posts.Where(p => p.UserId == profile.UserId).OrderByDescending(p => p.Date).ToList();
             return View(profile);
         }
 
@@ -123,7 +125,7 @@ namespace DAW_social_platform.Controllers
                             db.SaveChanges();
                             TempData["message"] = "Profilul a fost modificat!";
                         }
-                        return RedirectToAction("Index", "Manage");
+                        return Redirect("/Profiles/Show/" + profile.ProfileId);
                     }
                     else
                     {
@@ -162,7 +164,7 @@ namespace DAW_social_platform.Controllers
                 db.Profiles.Remove(profile);
                 TempData["message"] = "Profilul a fost sters!";
                 db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Manage");
             }
             else
             {

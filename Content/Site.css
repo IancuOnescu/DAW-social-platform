@@ -11,6 +11,7 @@
     --danger-color: #ff7675;
     --danger-color-hover: #d63031;
     --best-grey: #eeeeee;
+    --lightblue: rgb(127, 255, 212, .15);
 }
 
 
@@ -174,6 +175,9 @@ textarea {
 .second-actions > a:first-child{
     background-color: var(--fourth-color);
 }
+.second-actions > a:first-child:hover {
+    background-color: var(--second-color);
+}
 
 /* Group Requests*/
 .request-wrapper{
@@ -288,17 +292,23 @@ textarea {
     padding: 10px;
     margin: 20px 0 0 0;
     border-radius: 10px;
-    border-left: 2px solid var(--main-color);
-    border-right: 2px solid var(--main-color);
+    border-left: 3px solid var(--main-color);
+    border-right: 3px solid var(--main-color);
     min-height: 130px;
-    background-color: rgb(127, 255, 212, .15);
+    background-color: var(--lightblue);
 }
-.post a{
+.post a, .post button{
     margin: 20px 0 0 0;
     border-radius: 8px;
     background-color: var(--second-color);
     border: 0;
     transition: background-color 0.3s;
+}
+.post button {
+    background-color: var(--danger-color);
+}
+.post button:hover {
+    background-color: rgb(220,20,60);
 }
 .post a:hover{
     background-color: var(--fourth-color);
@@ -307,6 +317,7 @@ textarea {
     width: calc(100% - 30px);
     margin: 0 0 10px 30px;
 }
+/*User*/
 .user{
     width: 100%;
     height: 30px;
@@ -326,10 +337,105 @@ textarea {
     border-radius: 50px;
     margin-top: 2px;
 }
-.post-show a, .post-show button {
+.post-show a, .post-show button, .user-footer a, .user-footer button {
     border-radius: 8px !important;
 }
-
+.user-footer {
+    padding: 10px;
+    width: 100%;
+    min-height: 54px !important;
+    background-color: var(--lightblue);
+    border-top: 1px solid var(--main-color);
+    border-radius: 0 0 10px 10px;
+}
+.edit-btn {
+    border: 0;
+    background-color: var(--fourth-color);
+    transition: background-color 0.3s;
+}
+.edit-btn:hover {
+    background-color: var(--second-color);
+}
+.profile-btn {
+    border: 0;
+    background-color: var(--second-color);
+    transition: background-color 0.3s;
+}
+.profile-btn:hover {
+    background-color: var(--fourth-color);
+}
+/*Profile*/
+.user-info{
+    float: left;
+    padding: initial !important;
+}
+.profile-wrapper {
+    width: 100%;
+    float: left;
+    padding: 10px;
+    border-radius: 10px;
+    /*background-color: var(--lightblue);*/
+    box-shadow: var(--main-shadow);
+    margin-bottom: 20px;
+}
+.user-profile {
+    width: 100%;
+    float: left;
+    padding: 0 0 20px 0;
+    border-bottom: 1px solid var(--main-color);
+}
+.user-profile-badge{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: cornflowerblue;
+    color: white;
+    text-align: center;
+    font-size: 70px;
+    float:left;
+}
+.user-profile-name{
+    float: left;
+    margin-top: 35px;
+    font-size: 20px;
+}
+.description{
+    width: 100%;
+    float: left;
+    margin: 10px 0;
+    text-align: center;
+}
+.basic-info {
+    width: 100%;
+    float: left;
+    border-bottom: 1px solid var(--main-color);
+    padding: 10px 0;
+}
+.basic-info:first-child{
+    padding: 0 0 10px 0;
+}
+.basic-info:last-child{
+    border: 0;
+    padding: 10px 0 0 0;
+}
+.basic-info > * {
+    margin: 0;
+    float: left;
+}
+.profile-danger {
+    background-color: rgb(240, 128, 128, .5);
+}
+.user-posts{
+    float: left;
+}
+/*Manage*/
+.manage-account{
+    float: left;
+    margin-bottom: 20px;
+}
+.manage-profile{
+    float: left;
+}
 
 footer {
     background-color: white;

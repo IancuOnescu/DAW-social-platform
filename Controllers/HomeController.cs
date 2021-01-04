@@ -84,8 +84,8 @@ namespace DAW_social_platform.Controllers
 
             ViewBag.total = totalItems;
             ViewBag.lastpage = Math.Ceiling((float)maxItems / (float)pageSize);
-            ViewBag.Users = paginatedUsers;
-            ViewBag.Groups = paginatedGroups;
+            ViewBag.Users = paginatedUsers.ToList();
+            ViewBag.Groups = paginatedGroups.ToList();
             ViewBag.Profiles = profiles;
             ViewBag.Addable = addable;
             ViewBag.usr = usr;

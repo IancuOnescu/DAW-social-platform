@@ -27,9 +27,22 @@
 
         <div class="post-content">@post.Content</div>
 
-        <a class="btn btn-success" href="/Posts/Show/@post.PostId">Afisare postare</a>
+        <div style="width: 100%;">
+            <a class="btn btn-success" style="float:left;" href="/Posts/Show/@post.PostId">Afisare postare</a>
+            @if (post.UserId == ViewBag.currentUser || User.IsInRole("Admin"))
+            {
+                using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = post.PostId }))
+                {
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button class="btn btn-danger pull-right" style="float:right;" type="submit"> Sterge Postarea</button>
+                }
+            }
+        </div>
     </div>
 }
 <br />
 <br />
 
+@section heads{
+    <link rel="stylesheet" href="~/Content/Site.css" />
+}

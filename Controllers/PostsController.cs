@@ -42,7 +42,7 @@ namespace DAW_social_platform.Controllers
                 var posts = db.Posts.Where(p => users1.Contains(p.UserId) || p.UserId == userId).OrderByDescending(p => p.Date).ToList();
                 ViewBag.posts = posts;
             }
-            
+            ViewBag.currentUser = User.Identity.GetUserId();
             return View();
         }
 

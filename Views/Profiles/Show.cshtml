@@ -1,33 +1,88 @@
 ﻿@{
     ViewBag.Title = "Show";
 }
-
-<h2>@ViewBag.username</h2>
-
-<p>Descriere:</p>
-<p>@Model.Description</p>
-
 <br />
-<br />
+<div class="user-info col-md-4">
 
-<p>Hobbies:</p>
-<p>@Model.Hobbies</p>
+    <div class="profile-wrapper col-md-12">
+        <div class="user-profile">
+            <div class="user-profile-badge">@Model.User.UserName.ToString().ToUpper()[0]</div>
+            <div class="user-profile-name"><b>&nbsp; @Model.User.UserName</b></div>
+        </div>
 
-<br />
-<br />
+        <div class="description">
+            <p style="margin: 0;">@Model.Description</p>
+        </div>
+    </div>
 
-<p>Data nasterii:</p>
-<p>@Model.BirthDate</p>
+    <div class="col-md-12 profile-wrapper">
+        <div class="basic-info">
+            <p><b>Email:</b></p>
+            <p>&nbsp; @Model.User.Email</p>
+        </div>
 
-<br />
-<br />
+        <div class="basic-info">
+            <p><b>Hobbies:</b></p>
+            <p>&nbsp; @Model.Hobbies</p>
+        </div>
 
-@if (ViewBag.isAdmin){
-    <form method="post" action="/Profiles/Delete/@Model.ProfileId">
+        <div class="basic-info">
+            <p><b>Data nasterii:</b></p>
+            <p>&nbsp; @Model.BirthDate.ToShortDateString()</p>
+        </div>
 
-        @Html.HttpMethodOverride(HttpVerbs.Delete)
+    </div>
 
-        <button class="btn btn-danger" type="submit">Sterge profilul</button>
+    @if (ViewBag.isAdmin){
+        <div class="col-md-12 profile-wrapper profile-danger">
 
-    </form>
-}
+            <a class="btn btn-success" style="float:left;" href="/Profiles/Edit/@Model.ProfileId">Editeaza profil</a>
+
+            <form method="post" action="/Profiles/Delete/@Model.ProfileId">
+
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+                <button class="btn btn-danger" style="float:right;" type="submit">Sterge profilul</button>
+
+            </form>
+
+        </div>
+    }
+
+</div>
+
+<div class="user-posts col-md-8">
+
+    <div class="title title-center col-md-12" style="margin-top: 0;">
+        <h2>Postari</h2>
+        <a class="btn btn-primary" href="/Posts/New">Adauga postare</a>
+    </div>
+
+    @foreach(var post in ViewBag.posts){
+    <div class="post col-md-12">
+        <div class="user">
+            <div class="user-badge">@post.User.UserName.ToString().ToUpper()[0]</div>
+            <div class="username"><b>&nbsp; @post.User.UserName</b></div>
+        </div>
+
+        <div class="post-content">@post.Content</div>
+
+        <div style="width: 100%;">
+            <a class="btn btn-success" style="float:left;" href="/Posts/Show/@post.PostId">Afisare postare</a>
+            @if (post.UserId == ViewBag.currentUser || User.IsInRole("Admin"))
+            {
+                using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = post.PostId }))
+                {
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button class="btn btn-danger pull-right" style="float:right;" type="submit"> Sterge Postarea</button>
+                }
+            }
+        </div>
+    </div>
+    }
+
+</div>
+
+
+
+

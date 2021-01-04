@@ -1,32 +1,50 @@
 ﻿@{
- ViewBag.Title = "Afisare utilizatori";
+    ViewBag.Title = "Afisare utilizatori";
 }
-<ol class="breadcrumb">
- <li><h3>@ViewBag.Title</h3></li>
-</ol>
+
+<div class="title title-center col-md-12">
+    <h2>Afisare utilizatori</h2>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+
 @foreach (var user in ViewBag.UsersList)
 {
-     <div class="panel-heading">Nume utilizator: @user.UserName</div>
-     <div class="panel-body">
-     <i class="glyphicon glyphicon-envelope"></i> Email utilizator: <span class="label label-default">@user.Email</span>
-     <br /><br />
-     @if (@user.PhoneNumber != null)
-     {
-     <i class="glyphicon glyphicon-phone"></i>@:Telefon utilizator:<span class="label label-default">@user.PhoneNumber</span>
-     }
-     @foreach ( var profile in ViewBag.Profiles)
-     {
-         if(profile.UserId == user.Id && (profile.Status == true || ViewBag.isAdmin))
-         {
-            <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
-         }
-     }
-     </div>
-     if (ViewBag.isAdmin)
-     {
-         <div class="panel-footer">
-         <a class="btn btn-sm btn-success" href="/Users/Edit/@user.Id">Editare utilizator</a>
-         </div>
-     }
-     <br /><br />
+    <div class="user">
+        <div class="user-badge">@user.UserName.ToString().ToUpper()[0]</div>
+        <div class="username"><b>&nbsp; @user.UserName</b></div>
+    </div>
+
+    <div class="panel-body" style="margin-left: 15px;">
+        <i class="glyphicon glyphicon-envelope"></i> Email utilizator: <span class="label label-default">@user.Email</span>
+        <br /><br />
+        @if (@user.PhoneNumber != null)
+        {
+            <i class="glyphicon glyphicon-phone"></i>@:Telefon utilizator:<span class="label label-default">@user.PhoneNumber</span>
+        }
+
+    </div>
+
+    <div class="user-footer">
+        @foreach (var profile in ViewBag.Profiles)
+        {
+            if (profile.UserId == user.Id && (profile.Status == true || ViewBag.isAdmin))
+            {
+                <a class="btn btn-success profile-btn" style="float:left" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
+            }
+        }
+
+        @if (ViewBag.isAdmin)
+        {
+            <a class="btn btn-success edit-btn" style="float:right" href="/Users/Edit/@user.Id">Editare utilizator</a>
+        }
+    </div>
+    <br /><br />
+}
+
+@section heads{
+    <link rel="stylesheet" href="~/Content/Site.css" />
 }
