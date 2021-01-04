@@ -1,18 +1,33 @@
-﻿<h1>Cereri de prietenie</h1>
+﻿<div class="title col-md-12" style="padding: 0;">
+    <h2>Cereri de prietenie</h2>
+</div>
 
 @foreach (var req in ViewBag.requesters)
 {
-    <p>@req.UserName</p>
-    foreach (var profile in ViewBag.Profiles)
-    {
-        if (profile.UserId == req.Id && profile.Status == true || profile.UserId == req.Id)
-        {
-            <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
-        }
-    }
-    using (Html.BeginForm(actionName: "AcceptFriendRequests", controllerName: "Users"))
-    {
-        <input type="hidden" name="fromId" value="@req.Id" />
-        <button class="btn btn-primary btn-join" type="submit">Accept</button>
-    }
+    <div class="request-wrapper col-md-3">
+        <div class="request col-md-12">
+
+            <div class="user">
+                <div class="user-badge">@req.UserName.ToString().ToUpper()[0]</div>
+                <div class="username"><b>&nbsp; @req.UserName</b></div>
+            </div>
+
+            @foreach (var profile in ViewBag.Profiles)
+            {
+                if (profile.UserId == req.Id && profile.Status == true || profile.UserId == req.Id)
+                {
+                    <div class="col-md-6 req-btn">
+                        <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Profil</a>
+                    </div>
+                }
+            }
+
+            @using (Html.BeginForm("AcceptFriendRequests", "Users", FormMethod.Post, new { @class = "col-md-6 req-btn" }))
+            {
+                <input type="hidden" name="fromId" value="@req.Id" />
+                <button class="btn btn-primary btn-join" type="submit">Accept</button>
+            }
+            
+        </div>
+    </div>
 }

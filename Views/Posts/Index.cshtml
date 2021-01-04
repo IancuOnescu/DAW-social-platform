@@ -3,24 +3,46 @@
     ViewBag.Title = "Index";
 }
 
-<h2>News Feed</h2>
-
 @if (TempData.ContainsKey("message"))
- {
+{
     <h1>@ViewBag.message</h1>
- }
+}
+<br />
+
+<div class="title title-center col-md-12">
+    <h2>News Feed</h2>
+    <a class="btn btn-primary" href="/Posts/New">Adauga postare</a>
+</div>
+<br />
+<br />
 <br />
 
 @foreach (DAW_social_platform.Models.Post post in ViewBag.posts)
- {
-<div>
-    <div>@post.Content</div>
-    <br />
-    <a class="btn btn-success" href="/Posts/Show/@post.PostId">Afisare postare</a>
-</div>
-    <hr />
- }
-<br />
-<br />
-<a class="btn btn-primary" href="/Posts/New">Adauga postare</a>
+{
+    <div class="post col-md-12">
+        <div class="user">
+            <div class="user-badge">@post.User.UserName.ToString().ToUpper()[0]</div>
+            <div class="username"><b>&nbsp; @post.User.UserName</b></div>
+        </div>
 
+        <div class="post-content">@post.Content</div>
+
+        <div style="width: 100%;">
+            <a class="btn btn-success" style="float:left;" href="/Posts/Show/@post.PostId">Afisare postare</a>
+            @if (post.UserId == ViewBag.currentUser || User.IsInRole("Admin"))
+            {
+                using (Html.BeginForm(actionName: "Delete", controllerName: "Posts", method: FormMethod.Post, routeValues: new { id = post.PostId }))
+                {
+                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                    <button class="btn btn-danger pull-right" style="float:right;" type="submit"> Sterge Postarea</button>
+                }
+            }
+        </div>
+    </div>
+}
+<br />
+<br />
+
+@section heads{
+    <link rel="stylesheet" href="~/Content/Site.css" />
+}

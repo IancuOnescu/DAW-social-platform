@@ -1,18 +1,20 @@
 ﻿
 @{ ViewBag.Title = "create post"; }
 
-<h2>Adauga postare</h2>
+<div class="title col-md-12" style="padding: 0;">
+    <h2>Adauga postare</h2>
+</div>
 
-@using (Html.BeginForm(actionName: "New", controllerName: "Posts"))
+@using (Html.BeginForm("New", "Posts", FormMethod.Post, new { @class = "form col-md-4" }))
 {
     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
- 
-    @Html.TextBox("Content", null, new { @class = "form-control" })
+
     @Html.Label("Content", "Continutul postarii")
     <br />
     @Html.TextBox("Content", null, new { @class = "form-control" })
 
     @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+    <br />
 
     <button class="btn btn-sm btn-success" type="submit">Creeaza Postare</button>
 }

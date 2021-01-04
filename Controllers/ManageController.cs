@@ -74,6 +74,7 @@ namespace DAW_social_platform.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
                 ProfileId = GetProfileId()
             };
+            
             return View(model);
         }
 

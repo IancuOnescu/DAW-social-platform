@@ -3,9 +3,11 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<div class="title col-md-12" style="padding: 0;">
+    <h2>Editeaza profilul</h2>
+</div>
 
-@using (Html.BeginForm(actionName: "Edit", controllerName: "Profiles"))
+@using (Html.BeginForm("Edit", "Profiles", FormMethod.Post, new { @class = "form col-md-4" }))
 {
     @Html.HttpMethodOverride(HttpVerbs.Put)
 
@@ -28,6 +30,7 @@
     @Html.Label("Hobbies", "Hobbies")
     <br />
     @Html.TextBox("Hobbies", null, new { @class = "form-control" })
+    <br />
 
     @Html.Label("Status", "Vizibilitatea profilului: ")
 

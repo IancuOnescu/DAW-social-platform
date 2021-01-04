@@ -39,6 +39,9 @@ namespace DAW_social_platform.Controllers
             var groups = db.Groups.OrderBy(a => a.GroupName).ToList();
             var search = "";
 
+            if (Request.Params.Get("search") != null && Request.Params.Get("search") == "")
+                return Redirect("Index");
+
             if(Request.Params.Get("search") != null)
             {
                 search = Request.Params.Get("search").Trim();
@@ -60,7 +63,7 @@ namespace DAW_social_platform.Controllers
                 maxItems = groups.Count();
             var currentPage = Convert.ToInt32(Request.Params.Get("page"));
             var offset = 0;
-            var pageSize = 2;
+            var pageSize = 3;
 
             if (!currentPage.Equals(0))
             {
@@ -81,8 +84,8 @@ namespace DAW_social_platform.Controllers
 
             ViewBag.total = totalItems;
             ViewBag.lastpage = Math.Ceiling((float)maxItems / (float)pageSize);
-            ViewBag.Users = paginatedUsers;
-            ViewBag.Groups = paginatedGroups;
+            ViewBag.Users = paginatedUsers.ToList();
+            ViewBag.Groups = paginatedGroups.ToList();
             ViewBag.Profiles = profiles;
             ViewBag.Addable = addable;
             ViewBag.usr = usr;

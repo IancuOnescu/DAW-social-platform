@@ -46,36 +46,67 @@
         </ul>
     </nav>
 </div>
-<p>Users</p>
+<div class="title col-md-12" style="padding: 0;">
+    <h2>Users</h2>
+</div>
+<br />
+<br />@if (ViewBag.Users.Count == 0)
+{
+    <h4>Nothing to show.</h4>
+}
 @foreach (var user in ViewBag.Users)
 {
-    <p>@user.UserName</p>
-    <p>@user.Email</p>
-    foreach (var profile in ViewBag.Profiles)
-    {
-        if (profile.UserId == user.Id && profile.Status == true)
+    <div class="user">
+        <div class="user-badge">@user.UserName.ToString().ToUpper()[0]</div>
+        <div class="username"><b>&nbsp; @user.UserName</b></div>
+    </div>
+
+    <div class="panel-body" style="margin-left: 15px;">
+        <i class="glyphicon glyphicon-envelope"></i> Email utilizator: <span class="label label-default">@user.Email</span>
+        <br /><br />
+        @if (@user.PhoneNumber != null)
         {
-            <a class="btn btn-success" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
+            <i class="glyphicon glyphicon-phone"></i>@:Telefon utilizator:<span class="label label-default">@user.PhoneNumber</span>
         }
-    }
-    if (ViewBag.usr != null)
-    {
-        foreach (var us in ViewBag.Addable)
+
+    </div>
+
+    <div class="user-footer">
+        @foreach (var profile in ViewBag.Profiles)
         {
-            if (us.Id == user.Id)
+            if (profile.UserId == user.Id && profile.Status == true)
             {
-                using (Html.BeginForm(actionName: "Add", controllerName: "Users"))
+                <a class="btn btn-success" style="float:left;" href="/Profiles/Show/@profile.ProfileId">Afisare profil</a>
+            }
+        }
+
+        @if (ViewBag.usr != null)
+        {
+            foreach (var us in ViewBag.Addable)
+            {
+                if (us.Id == user.Id)
                 {
-                <input type="hidden" name="reqId" value="@user.Id" />
-                <button class="btn btn-primary btn-join" type="submit">Add+</button>
+                    using (Html.BeginForm(actionName: "Add", controllerName: "Users"))
+                    {
+                        <input type="hidden" name="reqId" value="@user.Id" />
+                        <button class="btn btn-primary btn-join" style="float:right;" type="submit">Add+</button>
+                    }
                 }
             }
         }
-    }
+    </div>
+
+    <br />
 }
 <br />
 <br />
-<p>Groups</p>
+<div class="title col-md-12" style="padding: 0;">
+    <h2>Groups</h2>
+</div>
+@if (ViewBag.Groups.Count == 0)
+{
+    <h4>Nothing to show.</h4>
+}
 @foreach (DAW_social_platform.Models.Group group in ViewBag.Groups)
 {
     if (group.Users.Where(u => u.UserId == ViewBag.usr).Count() == 1)
@@ -86,7 +117,7 @@
     {
         @Html.Partial("GroupInfoReq", group)
     }
-    else if(ViewBag.usr != null)
+    else if (ViewBag.usr != null)
     {
         @Html.Partial("GroupInfoJoin", group)
     }

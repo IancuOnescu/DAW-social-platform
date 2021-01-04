@@ -3,15 +3,25 @@
     ViewBag.Title = "Manage";
 }
 
-<h2>@ViewBag.Title.</h2>
+@if (TempData.ContainsKey("message"))
+{
+    <h1>@ViewBag.message</h1>
+}
 
-<p class="text-success">@ViewBag.StatusMessage</p>
+<div class="title col-md-12">
+    <h2>Manage</h2>
+    <h4 class="text-success">@ViewBag.StatusMessage</h4>
+</div>
+<br />
+<br />
+<br />
+<br />
 <div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
+    <h4>Account</h4>
+
+    <div class="manage-account user-footer col-md-12">
+        <div>
+            <span><b>Password:</b></span>
             @if (Model.HasPassword)
             {
                 @Html.ActionLink("Change your password", "ChangePassword")
@@ -20,46 +30,58 @@
             {
                 @Html.ActionLink("Create", "SetPassword")
             }
-        </dd>
-        <dt>Username:</dt>
-        <dd>
+            <br />
+            <br />
+            <span><b>Username:</b></span>
             @Html.ActionLink("Change your username", "ChangeUsername")
-        </dd>
-        <dd>
-            @if (Model.ProfileId == -1)
-            {
-                <a class="btn btn-primary" href="/Profiles/New">Creeaza profil</a>
-            }
-            else
-            {
-                <a class="btn btn-primary" href="/Profiles/Show/@Model.ProfileId">Vizualizeaza profil</a>
-                <a class="btn btn-success" href="/Profiles/Edit/@Model.ProfileId">Editeaza profil</a>
-                <form method="post" action="/Profiles/Delete/@Model.ProfileId">
-                    @Html.HttpMethodOverride(HttpVerbs.Delete)
-                    <button class="btn btn-danger" type="submit">Sterge profilul</button>
-                </form>
-            }
-        </dd>
-        @*<dt>External Logins:</dt>
-        <dd>
-            @Model.Logins.Count 
-            @Html.ActionLink("Manage", "ManageLogins") 
-        </dd>*@
-        <dd>
-            <form method="post" action="/Manage/Delete">
+        </div>
+        <br />
+
+        <form method="post" action="/Manage/Delete">
+            @Html.HttpMethodOverride(HttpVerbs.Delete)
+            <button class="btn btn-danger" type="submit">Sterge Contul</button>
+        </form>
+
+    </div>
+
+    <h4>Profile</h4>
+    <div class="manage-profile user-footer col-md-12">
+
+        @if (Model.ProfileId == -1)
+        {
+            <a class="btn btn-primary" style="float:left; margin-right: 20px;" href="/Profiles/New">Creeaza profil</a>
+        }
+        else
+        {
+            <a class="btn btn-primary" style="float:left; margin-right: 20px;" href="/Profiles/Show/@Model.ProfileId">Vizualizeaza profil</a>
+            <a class="btn btn-success" style="float:left; margin-right: 20px;" href="/Profiles/Edit/@Model.ProfileId">Editeaza profil</a>
+            <form method="post" action="/Profiles/Delete/@Model.ProfileId">
                 @Html.HttpMethodOverride(HttpVerbs.Delete)
-                <button class="btn btn-danger" type="submit">Sterge Contul</button>
+                <button class="btn btn-danger" style="float:left; margin-right: 20px;" type="submit">Sterge profilul</button>
             </form>
+        }
+    </div>
+
+
+    <dl class="dl-horizontal">
+
+        @*<dt>External Logins:</dt>
+            <dd>
+                @Model.Logins.Count
+                @Html.ActionLink("Manage", "ManageLogins")
+            </dd>*@
+        <dd>
+
         </dd>
         @*
             Phone Numbers can used as a second factor of verification in a two-factor authentication system.
-             
+
              See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
                 for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-             
+
              Uncomment the following block after you have set up two-factor authentication
         *@
-        @*  
+        @*
             <dt>Phone Number:</dt>
             <dd>
                 @(Model.PhoneNumber ?? "None")
@@ -80,31 +102,31 @@
             </dd>
         *@
         @*@<dt>Two-Factor Authentication:</dt>
-        <dd>
-            <p>
-                There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication.
-            </p>
-            @if (Model.TwoFactor)
-                {
-                    using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            <dd>
+                <p>
+                    There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                    for details on setting up this ASP.NET application to support two-factor authentication.
+                </p>
+                @if (Model.TwoFactor)
                     {
-                        @Html.AntiForgeryToken()
-                        <text>Enabled
-                        <input type="submit" value="Disable" class="btn btn-link" />
-                        </text>
+                        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Enabled
+                            <input type="submit" value="Disable" class="btn btn-link" />
+                            </text>
+                        }
                     }
-                }
-                else
-                {
-                    using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    else
                     {
-                        @Html.AntiForgeryToken()
-                        <text>Disabled
-                        <input type="submit" value="Enable" class="btn btn-link" />
-                        </text>
+                        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Disabled
+                            <input type="submit" value="Enable" class="btn btn-link" />
+                            </text>
+                        }
                     }
-                }
-        </dd>*@
+            </dd>*@
     </dl>
 </div>

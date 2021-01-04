@@ -1,18 +1,28 @@
 ﻿@model DAW_social_platform.Models.Post
 @{ ViewBag.Title = "Show"; }
 
-<h2>Afisare postare</h2>
 
-<p>@Model.Content</p>
+<div class="title title-center col-md-12">
+    <h2>Afisare postare</h2>
+</div>
 <br />
-<span class="label label-success">@Model.Date</span>
 <br />
-<i class="glyphicon glyphicon-user"></i> <i>postata de</i> <strong> @Model.User.UserName </strong>
+<br />
+<br />
+
+<div class="user">
+    <div class="user-badge">@Model.User.UserName.ToString().ToUpper()[0]</div>
+    <div class="username"><b>&nbsp; @Model.User.UserName</b></div>
+    <div class="label label-success" style="float:right; margin-top: 7px;">@Model.Date</div>
+</div>
+
+<div class="post-content">@Model.Content</div>
+
 <br />
 
 @if (ViewBag.afisareButoane == true && Model.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
- {
-    <div class="panel-footer">
+{
+    <div class="panel-footer post-show" style="background-color: rgb(127, 255, 212, .15);">
         <a class="btn btn-success pull-left" href="/Posts/Edit/@Model.PostId">
             Modifica Postarea
         </a>
@@ -23,51 +33,57 @@
         }
         <div class="clearfix"></div>
     </div>
- }
+}
 
+<br />
+<p><b>Comments</b></p>
 <br />
 
 @foreach (var comment in Model.Comments)
 {
-<div class="container">
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-            <div>
-                <p>@comment.Content</p>
-                <small class="pull-right">@Model.Date</small>
-                <i class="glyphicon glyphicon-user"></i> <i>scris de</i> <strong> @comment.User.UserName </strong>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div>
+                    <div class="user">
+                        <div class="user-badge">@comment.User.UserName.ToString().ToUpper()[0]</div>
+                        <div class="username"><b>&nbsp; @comment.User.UserName</b></div>
+                        <div class="label label-default" style="float:right; margin-top: 7px;">@comment.Date</div>
+                    </div>
+                    <p style="margin-left: 30px;">@comment.Content</p>
+                </div>
+
+                @if (comment.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
+                {
+                    <div style="display: inline-block; float : right; margin-right: 15px">
+                        <a class="glyphicon glyphicon-pencil" href="/Comments/Edit/@comment.CommentId"></a>
+                    </div>
+                    <div style="display: inline-block; float : right; margin-right: 15px">
+                        <form method="post" action="/Comments/Delete/@comment.CommentId">
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
+                        </form>
+                    </div>
+                }
             </div>
-            @if (comment.UserId == ViewBag.utilizatorCurent || ViewBag.esteAdmin)
-            {
-                <div style="display: inline-block; float : left; margin-right: 15px">
-                    <a class="glyphicon glyphicon-pencil" href="/Comments/Edit/@comment.CommentId"></a>
-                </div>
-                <div style="display: inline-block; float : left">
-                    <form method="post" action="/Comments/Delete/@comment.CommentId">
-                        @Html.HttpMethodOverride(HttpVerbs.Delete)
-                        <button class="glyphicon glyphicon-trash" style="border: none; background: transparent" type="submit"></button>
-                    </form>
-                </div>
-            }
         </div>
+        <div class="col-md-2"></div>
     </div>
-    <div class="col-md-2"></div>
-</div>
-                <hr />}
+    <hr />}
 
 <br />
 
-<div class="container">
+<div class="send-message-container col-md-12">
     <form method="post" action="/Posts/Show/@Model.PostId">
-        <div class="panel-body">
+        <div>
             <input type="hidden" name="PostId" value="@Model.PostId" />
             <label>Scrie un comentariu</label>
             <br />
             <textarea class="form-control" name="Content"></textarea>
             @Html.ValidationMessage("Content", "", new { @class = "text-danger" })
             <br />
-            <button class="btn btn-success " type="submit">Posteaza comentariu</button>
+            <button class="btn btn-success " type="submit">Posteaza</button>
         </div>
     </form>
 </div>
