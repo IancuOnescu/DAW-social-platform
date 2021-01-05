@@ -55,7 +55,9 @@
 
     <div class="title title-center col-md-12" style="margin-top: 0;">
         <h2>Postari</h2>
-        <a class="btn btn-primary" href="/Posts/New">Adauga postare</a>
+        @if(Model.UserId == ViewBag.currentUser){
+            <a class="btn btn-primary" href="/Posts/New">Adauga postare</a>
+        }
     </div>
 
     @foreach(var post in ViewBag.posts){
